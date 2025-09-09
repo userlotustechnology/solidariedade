@@ -32,7 +32,7 @@ class HomeController extends Controller
         // Dashboard simplificado para todos os usuários
         $data = [
             'totalParticipants' => Participant::count(),
-            'activeParticipants' => Participant::count(), // Todos os participantes são considerados ativos
+            'activeParticipants' => Participant::where('status', 'active')->count(),
             'totalUsers' => User::count(),
             'totalDeliveries' => Delivery::count(),
             'upcomingDeliveries' => Delivery::where('delivery_date', '>', now())->count(),

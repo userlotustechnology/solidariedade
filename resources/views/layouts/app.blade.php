@@ -12,9 +12,12 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -30,7 +33,33 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            @if(auth()->user()->hasPermission('users.view') || auth()->user()->hasPermission('participants.view') || auth()->user()->hasPermission('deliveries.view'))
+                                <li class="nav-item dropdown">
+                                    <a id="managementDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-cogs"></i> Gerenciamento
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="managementDropdown">
+                                        @if(auth()->user()->hasPermission('participants.view'))
+                                            <a class="dropdown-item" href="{{ route('participants.index') }}">
+                                                <i class="fas fa-users"></i> Participantes
+                                            </a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('deliveries.view'))
+                                            <a class="dropdown-item" href="{{ route('deliveries.index') }}">
+                                                <i class="fas fa-truck"></i> Entregas
+                                            </a>
+                                        @endif
+                                        @if(auth()->user()->hasPermission('users.view'))
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="{{ route('users.index') }}">
+                                                <i class="fas fa-user-cog"></i> Usuários do Sistema
+                                            </a>
+                                        @endif
+                                    </div>
+                                </li>
+                            @endif
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -76,5 +105,6 @@
             @yield('content')
         </main>
     </div>
+    @stack('scripts')
 </body>
 </html>
