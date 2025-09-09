@@ -43,8 +43,8 @@ docker-compose exec solidariedade_php php artisan migrate --force
 ```
 
 3. **Acesse a aplicação**:
-- Aplicação: http://localhost
-- Banco de dados: localhost:3306
+- Aplicação: http://localhost:8083
+- Banco de dados: localhost:3308
 
 ## 📋 Comandos Disponíveis
 
@@ -98,9 +98,13 @@ O arquivo `.env.docker` contém as configurações específicas para Docker:
 
 ### Portas Expostas
 
-- **80**: Nginx (HTTP)
-- **3306**: MySQL
-- **6379**: Redis
+- **8083**: Nginx (HTTP)
+- **8443**: Nginx (HTTPS)
+- **3308**: MySQL
+- **6381**: Redis
+- **8082**: Adminer (desenvolvimento)
+- **8026**: MailHog Web UI (desenvolvimento)
+- **1026**: MailHog SMTP (desenvolvimento)
 
 ### Volumes
 
