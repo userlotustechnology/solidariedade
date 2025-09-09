@@ -1,6 +1,13 @@
-@extends('layouts.sidebar-simple')
+@extends('layouts.app')
 
 @section('page-title', 'Editar Participante')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item">
+    <a href="{{ route('participants.index') }}">Participantes</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Editar Participante</li>
+@endsection
 
 @section('content')
 <div class="container">
@@ -12,9 +19,6 @@
                     <div>
                         <a href="{{ route('participants.show', $participant) }}" class="btn btn-info">
                             <i class="fas fa-eye"></i> Visualizar
-                        </a>
-                        <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Voltar
                         </a>
                     </div>
                 </div>

@@ -1,27 +1,44 @@
-@extends('layouts.sidebar-simple')
+@extends('layouts.app')
 
-@section('page-title', 'Novo Participante')
+@section('title', 'Cadastrar Participante')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item">
+    <a href="{{ route('participants.index') }}">Participantes</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Cadastrar Participante</li>
+@endsection
 
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Cadastrar Novo Participante') }}</h4>
-                    <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                    </a>
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="ti-user me-2"></i>{{ __('Cadastrar Participante') }}
+                    </h4>
                 </div>
 
                 <div class="card-body">
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <h6>{{ __('Por favor, corrija os seguintes erros:') }}</h6>
+                            <ul class="mb-0">
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
                     <form method="POST" action="{{ route('participants.store') }}" enctype="multipart/form-data">
                         @csrf
 
-                        <!-- Informações Pessoais -->
+                        <!-- Dados Pessoais -->
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Informações Pessoais</h5>
+                                <h5 class="text-primary">Dados Pessoais</h5>
                                 <hr>
                             </div>
                         </div>
@@ -30,7 +47,7 @@
                             <div class="col-md-6">
                                 <label for="name" class="form-label">{{ __('Nome Completo') }} <span class="text-danger">*</span></label>
                                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                       name="name" value="{{ old('name') }}" required autofocus>
+                                       name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
                                 @error('name')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -44,7 +61,6 @@
                                     <option value="CPF" {{ old('document_type') === 'CPF' ? 'selected' : '' }}>CPF</option>
                                     <option value="RG" {{ old('document_type') === 'RG' ? 'selected' : '' }}>RG</option>
                                     <option value="CNH" {{ old('document_type') === 'CNH' ? 'selected' : '' }}>CNH</option>
-                                    <option value="Passaporte" {{ old('document_type') === 'Passaporte' ? 'selected' : '' }}>Passaporte</option>
                                 </select>
                                 @error('document_type')
                                     <span class="invalid-feedback" role="alert">
@@ -391,10 +407,10 @@
                         <div class="row mb-0">
                             <div class="col-md-12">
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> {{ __('Cadastrar Participante') }}
+                                    <i class="ti-save me-1"></i> {{ __('Cadastrar Participante') }}
                                 </button>
-                                <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                                    {{ __('Cancelar') }}
+                                <a href="{{ route('participants.index') }}" class="btn btn-secondary ms-2">
+                                    <i class="ti-arrow-left me-1"></i> {{ __('Cancelar') }}
                                 </a>
                             </div>
                         </div>
@@ -405,108 +421,3 @@
     </div>
 </div>
 @endsection
-
-@push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-@endpush
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Máscara para telefone celular
-    const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-
-            // Limitar a 11 dígitos (celular)
-            if (value.length > 11) {
-                value = value.substring(0, 11);
-            }
-
-            // Aplicar máscara conforme o número de dígitos
-            if (value.length >= 2) {
-                value = value.replace(/(\d{2})(\d)/, '($1) $2');
-            }
-            if (value.length >= 8) {
-                value = value.replace(/(\d{2}\) \d{5})(\d)/, '$1-$2');
-            }
-
-            e.target.value = value;
-        });
-
-        // Placeholder para celular
-        phoneInput.placeholder = '(11) 99999-9999';
-    }
-
-    // Máscara para CEP
-    const zipInput = document.getElementById('zip_code');
-    if (zipInput) {
-        zipInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 8) {
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            }
-            e.target.value = value;
-        });
-    }
-
-    // Máscara para documento (CPF/RG/CNH)
-    const documentInput = document.getElementById('document_number');
-    const documentTypeSelect = document.getElementById('document_type');
-
-    if (documentInput && documentTypeSelect) {
-        function applyDocumentMask() {
-            const type = documentTypeSelect.value;
-            documentInput.removeEventListener('input', cpfMask);
-            documentInput.removeEventListener('input', rgMask);
-            documentInput.removeEventListener('input', cnhMask);
-
-            if (type === 'CPF') {
-                documentInput.addEventListener('input', cpfMask);
-                documentInput.placeholder = '000.000.000-00';
-            } else if (type === 'RG') {
-                documentInput.addEventListener('input', rgMask);
-                documentInput.placeholder = '00.000.000-0';
-            } else if (type === 'CNH') {
-                documentInput.addEventListener('input', cnhMask);
-                documentInput.placeholder = '00000000000';
-            } else {
-                documentInput.placeholder = '';
-            }
-        }
-
-        function cpfMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            }
-            e.target.value = value;
-        }
-
-        function rgMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 9) {
-                value = value.replace(/(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1})$/, '$1-$2');
-            }
-            e.target.value = value;
-        }
-
-        function cnhMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) {
-                value = value.substring(0, 11);
-            }
-            e.target.value = value;
-        }
-
-        documentTypeSelect.addEventListener('change', applyDocumentMask);
-        applyDocumentMask(); // Aplicar máscara inicial
-    }
-});
-</script>
-@endpush

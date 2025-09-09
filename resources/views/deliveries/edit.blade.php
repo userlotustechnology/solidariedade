@@ -1,6 +1,13 @@
-@extends('layouts.sidebar-simple')
+@extends('layouts.app')
 
 @section('page-title', 'Editar Entrega')
+
+@section('breadcrumbs')
+<li class="breadcrumb-item">
+    <a href="{{ route('deliveries.index') }}">Entregas</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Editar Entrega</li>
+@endsection
 
 @section('content')
 <div class="container">
@@ -12,9 +19,6 @@
                     <div>
                         <a href="{{ route('deliveries.show', $delivery) }}" class="btn btn-info">
                             <i class="fas fa-users"></i> Participantes
-                        </a>
-                        <a href="{{ route('deliveries.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Voltar
                         </a>
                     </div>
                 </div>

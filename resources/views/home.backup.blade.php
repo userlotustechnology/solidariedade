@@ -1,4 +1,4 @@
-@extends('layouts.sidebar-simple')
+@extends('layouts.app')
 
 @section('page-title', 'Dashboard')
 

@@ -1,53 +1,195 @@
-@extends('layouts.sidebar-simple')
+@extends('layouts.app')
 
-@section('page-title', 'Nova Entrega')
+@section('breadcrumbs')
+<li class="breadcrumb-item">
+    <a href="{{ route('deliveries.index') }}">Entregas</a>
+</li>
+<li class="breadcrumb-item active" aria-current="page">Nova Entrega</li>
+@endsection
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="font-weight-bold">Nova Entrega</h3>
+                <h6 class="font-weight-normal mb-0">Crie uma nova entrega para distribuição aos participantes</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if($errors->any())
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Erro!</strong> Corrija os campos abaixo:
+                <ul class="mb-0 mt-2">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+@endif
+
+<form action="{{ route('deliveries.store') }}" method="POST">
+    @csrf
+
+    <div class="row">
+        <!-- Informações da Entrega -->
+        <div class="col-md-8 grid-margin stretch-card">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Nova Entrega') }}</h4>
-                    <a href="{{ route('deliveries.index') }}" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left"></i> Voltar
-                    </a>
-                </div>
-
                 <div class="card-body">
-                    <form method="POST" action="{{ route('deliveries.store') }}">
-                        @csrf
+                    <h4 class="card-title">Informações da Entrega</h4>
 
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="title" class="form-label">{{ __('Título da Entrega') }} <span class="text-danger">*</span></label>
-                                <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                                       name="title" value="{{ old('title') }}" required autofocus
-                                       placeholder="Ex: Entrega de dezembro de 2025">
-                                @error('title')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                    <div class="form-group">
+                        <label for="title">Título da Entrega <span class="text-danger">*</span></label>
+                        <input type="text"
+                               class="form-control @error('title') is-invalid @enderror"
+                               id="title"
+                               name="title"
+                               value="{{ old('title') }}"
+                               placeholder="Ex: Entrega de dezembro de 2025"
+                               required>
+                        @error('title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror"
+                                  id="description"
+                                  name="description"
+                                  rows="4"
+                                  placeholder="Descreva os itens que serão entregues ou outras informações importantes">{{ old('description') }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-text text-muted">Descrição opcional para identificar melhor a entrega</small>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="delivery_date">Data da Entrega <span class="text-danger">*</span></label>
+                                <input type="date"
+                                       class="form-control @error('delivery_date') is-invalid @enderror"
+                                       id="delivery_date"
+                                       name="delivery_date"
+                                       value="{{ old('delivery_date') }}"
+                                       required>
+                                @error('delivery_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="delivery_date" class="form-label">{{ __('Data da Entrega') }} <span class="text-danger">*</span></label>
-                                <input id="delivery_date" type="date" class="form-control @error('delivery_date') is-invalid @enderror"
-                                       name="delivery_date" value="{{ old('delivery_date') }}" required>
-                                @error('delivery_date')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status">Status <span class="text-danger">*</span></label>
+                                <select class="form-control @error('status') is-invalid @enderror"
+                                        id="status"
+                                        name="status"
+                                        required>
+                                    <option value="">Selecione o status</option>
+                                    <option value="scheduled" {{ old('status', 'scheduled') === 'scheduled' ? 'selected' : '' }}>Agendada</option>
+                                    <option value="in_progress" {{ old('status') === 'in_progress' ? 'selected' : '' }}>Em Andamento</option>
+                                    <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>Concluída</option>
+                                    <option value="cancelled" {{ old('status') === 'cancelled' ? 'selected' : '' }}>Cancelada</option>
+                                </select>
+                                @error('status')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
-                                <label for="status" class="form-label">{{ __('Status') }} <span class="text-danger">*</span></label>
-                                <select id="status" class="form-select @error('status') is-invalid @enderror" name="status" required>
-                                    <option value="">Selecione o status</option>
-                                    <option value="scheduled" {{ old('status') === 'scheduled' ? 'selected' : '' }}>Agendada</option>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Configurações -->
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Configurações</h4>
+
+                    <div class="mb-3 text-center">
+                        <div class="bg-light rounded-circle d-flex align-items-center justify-content-center mx-auto"
+                             style="width: 100px; height: 100px;">
+                            <i class="ti-package" style="font-size: 2.5rem; color: #ccc;"></i>
+                        </div>
+                        <p class="text-muted mt-2 small">Nova Entrega</p>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="mb-2">
+                            <strong>Status da Entrega</strong>
+                        </div>
+                        <div class="bg-light p-3 rounded">
+                            <div class="mb-2">
+                                <i class="ti-time text-primary me-1"></i>
+                                <small><strong>Agendada:</strong> Ainda não iniciada</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="ti-truck text-warning me-1"></i>
+                                <small><strong>Em Andamento:</strong> Entrega em execução</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="ti-check text-success me-1"></i>
+                                <small><strong>Concluída:</strong> Todas as entregas feitas</small>
+                            </div>
+                            <div>
+                                <i class="ti-close text-danger me-1"></i>
+                                <small><strong>Cancelada:</strong> Entrega cancelada</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="mb-2">
+                            <strong>Próximos Passos</strong>
+                        </div>
+                        <div class="bg-light p-3 rounded">
+                            <div class="mb-2">
+                                <i class="ti-user text-info me-1"></i>
+                                <small>1. Selecionar participantes</small>
+                            </div>
+                            <div class="mb-2">
+                                <i class="ti-check text-success me-1"></i>
+                                <small>2. Confirmar entregas</small>
+                            </div>
+                            <div>
+                                <i class="ti-clipboard text-warning me-1"></i>
+                                <small>3. Acompanhar progresso</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('deliveries.index') }}" class="btn btn-outline-secondary">
+                            <i class="ti-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti-check"></i> Criar Entrega
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
                                     <option value="in_progress" {{ old('status') === 'in_progress' ? 'selected' : '' }}>Em Andamento</option>
                                     <option value="completed" {{ old('status') === 'completed' ? 'selected' : '' }}>Concluída</option>
                                     <option value="cancelled" {{ old('status') === 'cancelled' ? 'selected' : '' }}>Cancelada</option>
