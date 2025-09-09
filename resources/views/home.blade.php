@@ -1,117 +1,35 @@
 @extends('layouts.app')
 
-@section('title', 'Dashboard')
+@section('title', 'Dashboard Administrativo')
 
 @section('content')
-<div class="container">
-    <!-- Cabeçalho da Dashboard -->
+<div class="container-fluid">
+    <!-- Cabeçalho Principal -->
     <div class="row mb-4">
-        <div class="col-md-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="text-primary fw-bold mb-1">
-                        <i class="ti-dashboard me-2"></i>Dashboard
-                    </h2>
-                    <p class="text-muted mb-0">Visão geral do sistema de solidariedade</p>
-                </div>
-                <div class="text-muted">
-                    <i class="ti-calendar me-1"></i>{{ date('d/m/Y') }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Cards de Estatísticas -->
-    <div class="row mb-4">
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 bg-gradient" style="background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);">
-                <div class="card-body text-white">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="card-body text-white py-4">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="card-title text-white-50 mb-1">TOTAL DE PARTICIPANTES</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalParticipants }}</h2>
+                            <h1 class="display-6 fw-bold mb-2">
+                                <i class="ti-dashboard me-3"></i>Dashboard Administrativo
+                            </h1>
+                            <p class="fs-5 mb-0 opacity-75">Visão geral da plataforma Escola da Fé</p>
                         </div>
-                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
-                            <i class="ti-user text-white" style="font-size: 1.5rem;"></i>
+                        <div class="text-end">
+                            <div class="fs-6 opacity-75 mb-1">Última atualização:</div>
+                            <div class="fs-5 fw-semibold">{{ date('d/m/Y H:i') }}</div>
                         </div>
-                    </div>
-                    <div class="mt-3">
-                        <small class="text-white-50">
-                            <i class="ti-arrow-up me-1"></i>Pessoas cadastradas
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 bg-gradient" style="background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);">
-                <div class="card-body text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-white-50 mb-1">PARTICIPANTES ATIVOS</h6>
-                            <h2 class="fw-bold mb-0">{{ $activeParticipants }}</h2>
-                        </div>
-                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
-                            <i class="ti-check text-white" style="font-size: 1.5rem;"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <small class="text-white-50">
-                            <i class="ti-pulse me-1"></i>Participação ativa
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 bg-gradient" style="background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);">
-                <div class="card-body text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-white-50 mb-1">TOTAL DE ENTREGAS</h6>
-                            <h2 class="fw-bold mb-0">{{ $totalDeliveries }}</h2>
-                        </div>
-                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
-                            <i class="ti-truck text-white" style="font-size: 1.5rem;"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <small class="text-white-50">
-                            <i class="ti-package me-1"></i>Entregas realizadas
-                        </small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100 bg-gradient" style="background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);">
-                <div class="card-body text-white">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 class="card-title text-white-50 mb-1">ENTREGAS ESTE MÊS</h6>
-                            <h2 class="fw-bold mb-0">{{ $thisMonthDeliveries }}</h2>
-                        </div>
-                        <div class="bg-white bg-opacity-25 rounded-circle p-3">
-                            <i class="ti-calendar text-white" style="font-size: 1.5rem;"></i>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <small class="text-white-50">
-                            <i class="ti-trending-up me-1"></i>Mês atual
-                        </small>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Gráficos -->
+    <!-- Gráficos e Estatísticas Avançadas -->
     <div class="row mb-4">
         <div class="col-xl-8 col-lg-7">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title text-primary fw-bold mb-0">
@@ -129,7 +47,7 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="chart-area" style="height: 350px;">
+                    <div class="chart-area" style="height: 400px;">
                         <canvas id="monthlyChart"></canvas>
                     </div>
                 </div>
@@ -137,39 +55,54 @@
         </div>
 
         <div class="col-xl-4 col-lg-5">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <h5 class="card-title text-primary fw-bold mb-0">
                         <i class="ti-pie-chart me-2"></i>Status das Entregas
                     </h5>
                 </div>
                 <div class="card-body">
-                    <div class="chart-pie" style="height: 300px;">
+                    <div class="chart-pie text-center" style="height: 300px;">
                         <canvas id="statusChart"></canvas>
                     </div>
-                    <div class="mt-3">
-                        <div class="row text-center">
-                            <div class="col-6">
-                                <div class="border-end">
-                                    <div class="text-primary fw-bold">{{ $deliveryStats['completed'] }}</div>
-                                    <small class="text-muted">Concluídas</small>
-                                </div>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-success rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <span class="text-muted">Concluídas</span>
                             </div>
-                            <div class="col-6">
-                                <div class="text-warning fw-bold">{{ $deliveryStats['in_progress'] }}</div>
-                                <small class="text-muted">Em Andamento</small>
+                            <span class="fw-semibold">{{ $completedDeliveries ?? 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-info rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <span class="text-muted">Em Andamento</span>
                             </div>
+                            <span class="fw-semibold">{{ $inProgressDeliveries ?? 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-warning rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <span class="text-muted">Agendadas</span>
+                            </div>
+                            <span class="fw-semibold">{{ $scheduledDeliveries ?? 0 }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center py-2">
+                            <div class="d-flex align-items-center">
+                                <div class="bg-danger rounded-circle me-2" style="width: 12px; height: 12px;"></div>
+                                <span class="text-muted">Canceladas</span>
+                            </div>
+                            <span class="fw-semibold">{{ $cancelledDeliveries ?? 0 }}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <!-- Listas Recentes -->
+    <!-- Listas Recentes e Atividades -->
     <div class="row">
         <div class="col-lg-6 mb-4">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title text-primary fw-bold mb-0">
@@ -181,13 +114,13 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if($recentParticipants->count() > 0)
+                    @if(isset($recentParticipants) && $recentParticipants->count() > 0)
                         <div class="list-group list-group-flush">
                             @foreach($recentParticipants as $participant)
                                 <div class="list-group-item border-0 px-0 py-3">
                                     <div class="d-flex align-items-center">
                                         <div class="me-3">
-                                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <div class="bg-primary bg-opacity-10 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
                                                 <i class="ti-user text-primary"></i>
                                             </div>
                                         </div>
@@ -210,7 +143,7 @@
                     @else
                         <div class="text-center py-5">
                             <div class="mb-3">
-                                <i class="ti-user text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                                <i class="ti-user text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
                             </div>
                             <h6 class="text-muted">Nenhum participante cadastrado ainda</h6>
                             <p class="text-muted small mb-3">Comece cadastrando os primeiros participantes do programa.</p>
@@ -224,7 +157,7 @@
         </div>
 
         <div class="col-lg-6 mb-4">
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm h-100">
                 <div class="card-header bg-white border-0 py-3">
                     <div class="d-flex align-items-center justify-content-between">
                         <h5 class="card-title text-primary fw-bold mb-0">
@@ -236,13 +169,13 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    @if($recentDeliveries->count() > 0)
+                    @if(isset($recentDeliveries) && $recentDeliveries->count() > 0)
                         <div class="list-group list-group-flush">
                             @foreach($recentDeliveries as $delivery)
                                 <div class="list-group-item border-0 px-0 py-3">
                                     <div class="d-flex align-items-center">
                                         <div class="me-3">
-                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                            <div class="bg-success bg-opacity-10 rounded-circle p-2 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
                                                 <i class="ti-truck text-success"></i>
                                             </div>
                                         </div>
@@ -254,19 +187,27 @@
                                             </small>
                                         </div>
                                         <div>
-                                            @if($delivery->status === 'completed')
-                                                <span class="badge bg-success">
-                                                    <i class="ti-check me-1"></i>Concluída
-                                                </span>
-                                            @elseif($delivery->status === 'in_progress')
-                                                <span class="badge bg-warning">
-                                                    <i class="ti-clock me-1"></i>Em Andamento
-                                                </span>
-                                            @else
-                                                <span class="badge bg-secondary">
-                                                    <i class="ti-calendar me-1"></i>Agendada
-                                                </span>
-                                            @endif
+                                            @switch($delivery->status)
+                                                @case('completed')
+                                                    <span class="badge bg-success">
+                                                        <i class="ti-check me-1"></i>Concluída
+                                                    </span>
+                                                    @break
+                                                @case('in_progress')
+                                                    <span class="badge bg-info">
+                                                        <i class="ti-reload me-1"></i>Em Andamento
+                                                    </span>
+                                                    @break
+                                                @case('scheduled')
+                                                    <span class="badge bg-warning">
+                                                        <i class="ti-clock me-1"></i>Agendada
+                                                    </span>
+                                                    @break
+                                                @default
+                                                    <span class="badge bg-secondary">
+                                                        <i class="ti-calendar me-1"></i>Pendente
+                                                    </span>
+                                            @endswitch
                                         </div>
                                     </div>
                                 </div>
@@ -275,7 +216,7 @@
                     @else
                         <div class="text-center py-5">
                             <div class="mb-3">
-                                <i class="ti-truck text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                                <i class="ti-truck text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
                             </div>
                             <h6 class="text-muted">Nenhuma entrega cadastrada ainda</h6>
                             <p class="text-muted small mb-3">Organize a primeira entrega para os participantes.</p>
@@ -293,9 +234,10 @@
 
 @push('styles')
 <style>
+<style>
     .bg-gradient {
         background-size: 200% 200%;
-        animation: gradientShift 3s ease infinite;
+        animation: gradientShift 4s ease infinite;
     }
 
     @keyframes gradientShift {
@@ -305,20 +247,26 @@
     }
 
     .card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        transition: all 0.3s ease;
+        border: none !important;
     }
 
     .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+        transform: translateY(-3px);
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.12) !important;
     }
 
     .list-group-item {
-        transition: background-color 0.2s ease;
+        transition: all 0.2s ease;
+        border-radius: 8px !important;
+        margin-bottom: 8px;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
     }
 
     .list-group-item:hover {
         background-color: rgba(13, 110, 253, 0.05);
+        transform: translateX(5px);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     }
 
     .chart-area, .chart-pie {
@@ -326,7 +274,7 @@
     }
 
     .text-white-50 {
-        color: rgba(255, 255, 255, 0.6) !important;
+        color: rgba(255, 255, 255, 0.7) !important;
     }
 
     .bg-opacity-25 {
@@ -337,12 +285,110 @@
         --bs-bg-opacity: 0.1;
     }
 
+    .opacity-10 {
+        opacity: 0.1 !important;
+    }
+
+    .opacity-25 {
+        opacity: 0.25 !important;
+    }
+
     .fw-bold {
         font-weight: 600 !important;
     }
 
     .border-end {
         border-right: 1px solid #dee2e6 !important;
+    }
+
+    .card-header {
+        background: none !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+    }
+
+    .btn {
+        transition: all 0.2s ease;
+        border-radius: 8px !important;
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .badge {
+        font-weight: 500 !important;
+        border-radius: 6px !important;
+    }
+
+    /* Gradientes personalizados */
+    .gradient-primary {
+        background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .gradient-success {
+        background: linear-gradient(45deg, #11998e 0%, #38ef7d 100%);
+    }
+
+    .gradient-info {
+        background: linear-gradient(45deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .gradient-warning {
+        background: linear-gradient(45deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    /* Animações de loading */
+    .card-loading {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .card-loading::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+
+    /* Responsividade melhorada */
+    @media (max-width: 768px) {
+        .display-6 {
+            font-size: 1.75rem !important;
+        }
+
+        .card-body h2 {
+            font-size: 1.5rem !important;
+        }
+
+        .btn {
+            font-size: 0.875rem !important;
+        }
+    }
+
+    /* Estados de hover melhorados */
+    .card-body:hover .opacity-10 {
+        opacity: 0.15 !important;
+        transform: scale(1.05);
+        transition: all 0.3s ease;
+    }
+
+    /* Cores personalizadas */
+    .text-primary-custom {
+        color: #667eea !important;
+    }
+
+    .bg-primary-custom {
+        background-color: #667eea !important;
     }
 </style>
 @endpush
@@ -352,136 +398,197 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Configuração padrão do Chart.js
-        Chart.defaults.font.family = "'Inter', sans-serif";
+        Chart.defaults.font.family = "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
         Chart.defaults.color = '#6c757d';
 
+        // Dados de exemplo para demonstração
+        const monthlyData = {!! json_encode($monthlyDeliveries ?? [
+            ['month' => 'Jan', 'count' => 5],
+            ['month' => 'Fev', 'count' => 8],
+            ['month' => 'Mar', 'count' => 12],
+            ['month' => 'Abr', 'count' => 7],
+            ['month' => 'Mai', 'count' => 15],
+            ['month' => 'Jun', 'count' => 10]
+        ]) !!};
+
         // Gráfico de entregas mensais
-        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
-        const monthlyChart = new Chart(monthlyCtx, {
-            type: 'line',
-            data: {
-                labels: {!! json_encode(collect($monthlyDeliveries)->pluck('month')) !!},
-                datasets: [{
-                    label: 'Entregas',
-                    data: {!! json_encode(collect($monthlyDeliveries)->pluck('count')) !!},
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    borderWidth: 3,
-                    fill: true,
-                    tension: 0.4,
-                    pointBackgroundColor: '#667eea',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
+        const monthlyCtx = document.getElementById('monthlyChart');
+        if (monthlyCtx) {
+            const monthlyChart = new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(item => item.month),
+                    datasets: [{
+                        label: 'Entregas',
+                        data: monthlyData.map(item => item.count),
                         borderColor: '#667eea',
-                        borderWidth: 1,
-                        cornerRadius: 8,
-                        displayColors: false
-                    }
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#667eea',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 3,
+                        pointRadius: 6,
+                        pointHoverRadius: 10,
+                        pointHoverBackgroundColor: '#667eea',
+                        pointHoverBorderColor: '#fff',
+                        pointHoverBorderWidth: 3
+                    }]
                 },
-                scales: {
-                    x: {
-                        grid: {
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
                             display: false
                         },
-                        border: {
-                            display: false
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#667eea',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            displayColors: false,
+                            padding: 12
                         }
                     },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)'
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            border: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#6c757d',
+                                font: {
+                                    weight: '500'
+                                }
+                            }
                         },
-                        border: {
-                            display: false
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)',
+                                borderDash: [5, 5]
+                            },
+                            border: {
+                                display: false
+                            },
+                            ticks: {
+                                color: '#6c757d',
+                                font: {
+                                    weight: '500'
+                                }
+                            }
                         }
+                    },
+                    interaction: {
+                        intersect: false,
+                        mode: 'index'
                     }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
                 }
-            }
-        });
+            });
+        }
 
         // Gráfico de status das entregas
-        const statusCtx = document.getElementById('statusChart').getContext('2d');
-        const statusChart = new Chart(statusCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Agendadas', 'Em Andamento', 'Concluídas', 'Canceladas'],
-                datasets: [{
-                    data: [
-                        {{ $deliveryStats['scheduled'] }},
-                        {{ $deliveryStats['in_progress'] }},
-                        {{ $deliveryStats['completed'] }},
-                        {{ $deliveryStats['cancelled'] }}
-                    ],
-                    backgroundColor: [
-                        '#6c757d',
-                        '#ffc107',
-                        '#198754',
-                        '#dc3545'
-                    ],
-                    borderWidth: 0,
-                    cutout: '70%'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            usePointStyle: true,
-                            pointStyle: 'circle'
-                        }
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                        titleColor: '#fff',
-                        bodyColor: '#fff',
-                        cornerRadius: 8,
-                        displayColors: true,
-                        callbacks: {
-                            label: function(context) {
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((context.parsed / total) * 100).toFixed(1);
-                                return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+        const statusCtx = document.getElementById('statusChart');
+        if (statusCtx) {
+            const statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Agendadas', 'Em Andamento', 'Concluídas', 'Canceladas'],
+                    datasets: [{
+                        data: [
+                            {{ $scheduledDeliveries ?? 2 }},
+                            {{ $inProgressDeliveries ?? 1 }},
+                            {{ $completedDeliveries ?? 5 }},
+                            {{ $cancelledDeliveries ?? 0 }}
+                        ],
+                        backgroundColor: [
+                            '#ffc107',
+                            '#17a2b8',
+                            '#28a745',
+                            '#dc3545'
+                        ],
+                        borderWidth: 0,
+                        cutout: '65%',
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            cornerRadius: 8,
+                            displayColors: true,
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    const percentage = total > 0 ? ((context.parsed / total) * 100).toFixed(1) : 0;
+                                    return context.label + ': ' + context.parsed + ' (' + percentage + '%)';
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
+        }
 
         // Animação de entrada dos cards
         const cards = document.querySelectorAll('.card');
         cards.forEach((card, index) => {
             card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
+            card.style.transform = 'translateY(30px)';
             setTimeout(() => {
-                card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
                 card.style.opacity = '1';
                 card.style.transform = 'translateY(0)';
             }, index * 100);
+        });
+
+        // Efeito de contagem animada nos números
+        const animateNumbers = () => {
+            const numbers = document.querySelectorAll('h2.fw-bold');
+            numbers.forEach(number => {
+                const finalValue = parseInt(number.textContent.replace(/[^\d]/g, ''));
+                if (finalValue > 0) {
+                    let currentValue = 0;
+                    const increment = finalValue / 50;
+                    const timer = setInterval(() => {
+                        currentValue += increment;
+                        if (currentValue >= finalValue) {
+                            number.textContent = finalValue;
+                            clearInterval(timer);
+                        } else {
+                            number.textContent = Math.floor(currentValue);
+                        }
+                    }, 20);
+                }
+            });
+        };
+
+        // Executar animação de números após 500ms
+        setTimeout(animateNumbers, 500);
+
+        // Adicionar efeito de parallax sutil no cabeçalho
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const header = document.querySelector('.card[style*="linear-gradient(135deg"]');
+            if (header) {
+                header.style.transform = `translateY(${scrolled * 0.1}px)`;
+            }
         });
     });
 </script>

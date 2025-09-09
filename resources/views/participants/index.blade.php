@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('breadcrumbs')
-<li class="breadcrumb-item active" aria-current="page">Participantes</li>
-@endsection
-
 @section('content')
     <div class="row">
         <div class="col-12">

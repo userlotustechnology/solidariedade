@@ -1,9 +1,5 @@
 @extends('layouts.app')
 
-@section('breadcrumbs')
-<li class="breadcrumb-item active" aria-current="page">Usuários</li>
-@endsection
-
 @section('content')
     <div class="row">
         <div class="col-12">
@@ -25,7 +21,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <div>
-                            <h4 class="card-title mb-0">Usuários da Plataforma</h4>
+                            <h4 class="card-title mb-0">Usuários</h4>
                             <p class="text-muted">Gerencie todos os usuários cadastrados</p>
                         </div>
                         <div class="d-flex gap-2">
