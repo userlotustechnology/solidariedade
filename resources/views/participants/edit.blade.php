@@ -449,12 +449,12 @@ document.addEventListener('DOMContentLoaded', function() {
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            
+
             // Limitar a 11 dígitos (celular)
             if (value.length > 11) {
                 value = value.substring(0, 11);
             }
-            
+
             // Aplicar máscara conforme o número de dígitos
             if (value.length >= 2) {
                 value = value.replace(/(\d{2})(\d)/, '($1) $2');
@@ -462,10 +462,10 @@ document.addEventListener('DOMContentLoaded', function() {
             if (value.length >= 8) {
                 value = value.replace(/(\d{2}\) \d{5})(\d)/, '$1-$2');
             }
-            
+
             e.target.value = value;
         });
-        
+
         // Placeholder para celular
         phoneInput.placeholder = '(11) 99999-9999';
     }
