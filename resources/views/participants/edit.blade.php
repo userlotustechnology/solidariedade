@@ -112,9 +112,9 @@
                                 @enderror
                             </div>
                             <div class="col-md-3">
-                                <label for="phone" class="form-label">{{ __('Telefone') }}</label>
+                                <label for="phone" class="form-label">{{ __('Celular') }}</label>
                                 <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                       name="phone" value="{{ old('phone', $participant->phone) }}">
+                                       name="phone" value="{{ old('phone', $participant->formatted_phone) }}" placeholder="(11) 99999-9999">
                                 @error('phone')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -444,17 +444,30 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Máscara para telefone
+    // Máscara para telefone celular
     const phoneInput = document.getElementById('phone');
     if (phoneInput) {
         phoneInput.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{2})(\d)/, '($1) $2');
-                value = value.replace(/(\d{4,5})(\d{4})$/, '$1-$2');
+            
+            // Limitar a 11 dígitos (celular)
+            if (value.length > 11) {
+                value = value.substring(0, 11);
             }
+            
+            // Aplicar máscara conforme o número de dígitos
+            if (value.length >= 2) {
+                value = value.replace(/(\d{2})(\d)/, '($1) $2');
+            }
+            if (value.length >= 8) {
+                value = value.replace(/(\d{2}\) \d{5})(\d)/, '$1-$2');
+            }
+            
             e.target.value = value;
         });
+        
+        // Placeholder para celular
+        phoneInput.placeholder = '(11) 99999-9999';
     }
 
     // Máscara para CEP

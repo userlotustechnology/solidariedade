@@ -62,7 +62,7 @@
                                     <th>ID</th>
                                     <th>Nome</th>
                                     <th>Documento</th>
-                                    <th>Telefone</th>
+                                    <th>Celular</th>
                                     <th>Família</th>
                                     <th>Status</th>
                                     <th>Cadastrado em</th>
@@ -78,7 +78,7 @@
                                             <small class="text-muted">{{ $participant->document_type }}</small><br>
                                             {{ $participant->formatted_document }}
                                         </td>
-                                        <td>{{ $participant->phone ?: '-' }}</td>
+                                        <td>{{ $participant->formatted_phone ?: '-' }}</td>
                                         <td>
                                             <span class="badge bg-info">
                                                 {{ $participant->family_members }}

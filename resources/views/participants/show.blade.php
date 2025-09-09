@@ -85,9 +85,9 @@
 
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Telefone') }}</div>
+                            <div class="fw-bold text-muted mb-1">{{ __('Celular') }}</div>
                             <p class="form-control-plaintext border rounded p-2 bg-light">
-                                {{ $participant->phone ?: 'Não informado' }}
+                                {{ $participant->formatted_phone ?: 'Não informado' }}
                             </p>
                         </div>
                         <div class="col-md-6">

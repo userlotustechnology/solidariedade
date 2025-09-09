@@ -50,6 +50,37 @@ class Participant extends Model
     ];
 
     /**
+     * Accessor para formatar o telefone na exibição
+     */
+    public function getFormattedPhoneAttribute()
+    {
+        if (!$this->phone) {
+            return null;
+        }
+
+        $phone = preg_replace('/\D/', '', $this->phone);
+        $length = strlen($phone);
+        
+        if ($length === 11) {
+            return '(' . substr($phone, 0, 2) . ') ' . substr($phone, 2, 5) . '-' . substr($phone, 7);
+        }
+        
+        if ($length === 10) {
+            return '(' . substr($phone, 0, 2) . ') ' . substr($phone, 2, 4) . '-' . substr($phone, 6);
+        }
+        
+        return $this->phone;
+    }
+
+    /**
+     * Mutator para limpar o telefone antes de salvar
+     */
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = $value ? preg_replace('/\D/', '', $value) : null;
+    }
+
+    /**
      * Relacionamento com o usuário que registrou
      */
     public function registeredBy(): BelongsTo
