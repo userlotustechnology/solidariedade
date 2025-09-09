@@ -15,6 +15,9 @@
                                 <i class="fas fa-edit"></i> Editar
                             </a>
                         @endcan
+                        <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
+                            <i class="fas fa-print"></i> Imprimir Ficha
+                        </a>
                         <a href="{{ route('participants.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> Voltar
                         </a>
@@ -34,25 +37,57 @@
 
                     <!-- Informações Pessoais -->
                     <div class="row">
-                        <div class="col-md-12 mb-3">
+                        <div class="col-md-8 mb-3">
                             <h5 class="text-primary d-flex align-items-center">
                                 <i class="fas fa-user me-2"></i>
                                 Informações Pessoais
                             </h5>
                             <hr>
                         </div>
+                        <div class="col-md-4 mb-3">
+                            <h5 class="text-primary d-flex align-items-center">
+                                <i class="fas fa-camera me-2"></i>
+                                Foto
+                            </h5>
+                            <hr>
+                        </div>
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Nome Completo') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->name }}</p>
+                        <div class="col-md-8">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="fw-bold text-muted mb-1">{{ __('Nome Completo') }}</div>
+                                    <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->name }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="fw-bold text-muted mb-1">{{ __('Idade') }}</div>
+                                    <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->age }} anos</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Idade') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->age }} anos</p>
+                        <div class="col-md-4">
+                            <div class="text-center">
+                                @if($participant->photo)
+                                    <img src="{{ asset('storage/' . $participant->photo) }}"
+                                         alt="Foto de {{ $participant->name }}"
+                                         class="img-fluid rounded border"
+                                         style="max-height: 200px; max-width: 200px; object-fit: cover;">
+                                @else
+                                    <div class="border rounded d-flex align-items-center justify-content-center bg-light"
+                                         style="height: 200px; width: 200px; margin: 0 auto;">
+                                        <div class="text-center text-muted">
+                                            <i class="fas fa-user fa-3x mb-2"></i>
+                                            <p class="mb-0">Sem foto</p>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                        <div class="col-md-3">
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
                             <div class="fw-bold text-muted mb-1">{{ __('Gênero') }}</div>
                             <p class="form-control-plaintext border rounded p-2 bg-light">
                                 @if($participant->gender === 'M')
@@ -64,6 +99,30 @@
                                 @else
                                     Não informado
                                 @endif
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fw-bold text-muted mb-1">{{ __('Estado Civil') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                @switch($participant->marital_status)
+                                    @case('solteiro')
+                                        Solteiro(a)
+                                        @break
+                                    @case('casado')
+                                        Casado(a)
+                                        @break
+                                    @case('divorciado')
+                                        Divorciado(a)
+                                        @break
+                                    @case('viuvo')
+                                        Viúvo(a)
+                                        @break
+                                    @case('uniao_estavel')
+                                        União Estável
+                                        @break
+                                    @default
+                                        Não informado
+                                @endswitch
                             </p>
                         </div>
                     </div>
@@ -110,11 +169,15 @@
                     </div>
 
                     <div class="row mb-3">
-                        <div class="col-md-8">
+                        <div class="col-md-6">
                             <div class="fw-bold text-muted mb-1">{{ __('Endereço') }}</div>
                             <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->address }}</p>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
+                            <div class="fw-bold text-muted mb-1">{{ __('Complemento') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->address_complement ?: 'Não informado' }}</p>
+                        </div>
+                        <div class="col-md-3">
                             <div class="fw-bold text-muted mb-1">{{ __('Bairro') }}</div>
                             <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->neighborhood }}</p>
                         </div>
@@ -172,6 +235,91 @@
                                 @else
                                     Não calculado
                                 @endif
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Benefícios e Documentação -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <h5 class="text-primary d-flex align-items-center">
+                                <i class="fas fa-file-alt me-2"></i>
+                                Benefícios e Documentação
+                            </h5>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="fw-bold text-muted mb-1">{{ __('Recebe Benefício do Governo') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                @if($participant->receives_government_benefit)
+                                    <span class="badge bg-success">Sim</span>
+                                @else
+                                    <span class="badge bg-secondary">Não</span>
+                                @endif
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fw-bold text-muted mb-1">{{ __('Tipo de Benefício') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                {{ $participant->government_benefit_type ?: 'Não informado' }}
+                            </p>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="fw-bold text-muted mb-1">{{ __('Possui Documentos Básicos') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                @if($participant->has_documents)
+                                    <span class="badge bg-success">Sim</span>
+                                @else
+                                    <span class="badge bg-warning">Não</span>
+                                @endif
+                                <br><small class="text-muted">RG, CPF, Comprovante de residência</small>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Situação Trabalhista -->
+                    <div class="row">
+                        <div class="col-md-12 mb-3">
+                            <h5 class="text-primary d-flex align-items-center">
+                                <i class="fas fa-briefcase me-2"></i>
+                                Situação Trabalhista
+                            </h5>
+                            <hr>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="fw-bold text-muted mb-1">{{ __('Situação de Trabalho') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                @switch($participant->employment_status)
+                                    @case('empregado')
+                                        <span class="badge bg-success">Empregado</span>
+                                        @break
+                                    @case('desempregado')
+                                        <span class="badge bg-danger">Desempregado</span>
+                                        @break
+                                    @case('aposentado')
+                                        <span class="badge bg-info">Aposentado</span>
+                                        @break
+                                    @case('pensionista')
+                                        <span class="badge bg-info">Pensionista</span>
+                                        @break
+                                    @case('autonomo')
+                                        <span class="badge bg-warning">Autônomo</span>
+                                        @break
+                                    @default
+                                        Não informado
+                                @endswitch
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="fw-bold text-muted mb-1">{{ __('Local de Trabalho') }}</div>
+                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                                {{ $participant->workplace ?: 'Não informado' }}
                             </p>
                         </div>
                     </div>
@@ -332,6 +480,10 @@
                                         <i class="fas fa-edit"></i> {{ __('Editar Participante') }}
                                     </a>
                                 @endcan
+
+                                <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
+                                    <i class="fas fa-print"></i> {{ __('Imprimir Ficha') }}
+                                </a>
 
                                 @can('deliveries.manage')
                                     @if($participant->active)

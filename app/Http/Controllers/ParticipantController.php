@@ -70,6 +70,7 @@ class ParticipantController extends Controller
             'employment_status' => 'nullable|in:empregado,desempregado,aposentado,pensionista,autonomo',
             'workplace' => 'nullable|string|max:255',
             'has_documents' => 'nullable|boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'observations' => 'nullable|string|max:1000'
         ]);
 
@@ -77,6 +78,12 @@ class ParticipantController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
+        }
+
+        // Upload da foto se fornecida
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('participants/photos', 'public');
         }
 
         $participant = Participant::create([
@@ -101,6 +108,7 @@ class ParticipantController extends Controller
             'employment_status' => $request->employment_status,
             'workplace' => $request->workplace,
             'has_documents' => $request->has_documents === '1',
+            'photo' => $photoPath,
             'observations' => $request->observations,
             'registered_by' => Auth::id(),
             'registered_at' => now()
@@ -160,6 +168,7 @@ class ParticipantController extends Controller
             'employment_status' => 'nullable|in:empregado,desempregado,aposentado,pensionista,autonomo',
             'workplace' => 'nullable|string|max:255',
             'has_documents' => 'nullable|boolean',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'observations' => 'nullable|string|max:1000',
             'active' => 'required|boolean'
         ]);
@@ -168,6 +177,16 @@ class ParticipantController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
+        }
+
+        // Upload da nova foto se fornecida
+        $photoPath = $participant->photo; // Mantém a foto atual
+        if ($request->hasFile('photo')) {
+            // Remove a foto antiga se existir
+            if ($participant->photo && file_exists(storage_path('app/public/' . $participant->photo))) {
+                unlink(storage_path('app/public/' . $participant->photo));
+            }
+            $photoPath = $request->file('photo')->store('participants/photos', 'public');
         }
 
         $participant->update([
@@ -192,12 +211,23 @@ class ParticipantController extends Controller
             'employment_status' => $request->employment_status,
             'workplace' => $request->workplace,
             'has_documents' => $request->has_documents === '1',
+            'photo' => $photoPath,
             'observations' => $request->observations,
             'active' => $request->active
         ]);
 
         return redirect()->route('participants.index')
             ->with('success', 'Participante atualizado com sucesso!');
+    }
+
+    /**
+     * Print participant record
+     */
+    public function print(Participant $participant)
+    {
+        $participant->load(['registeredBy', 'deliveryRecords.delivery', 'deliveryRecords.deliveredBy']);
+
+        return view('participants.print', compact('participant'));
     }
 
     /**

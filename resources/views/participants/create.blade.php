@@ -15,7 +15,7 @@
                 </div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('participants.store') }}">
+                    <form method="POST" action="{{ route('participants.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <!-- Informações Pessoais -->
@@ -115,11 +115,24 @@
                                     </span>
                                 @enderror
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col-md-4">
                                 <label for="email" class="form-label">{{ __('E-mail') }}</label>
                                 <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
                                        name="email" value="{{ old('email') }}">
                                 @error('email')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="col-md-5">
+                                <label for="photo" class="form-label">{{ __('Foto do Participante') }}</label>
+                                <input id="photo" type="file" class="form-control @error('photo') is-invalid @enderror"
+                                       name="photo" accept="image/*">
+                                <small class="form-text text-muted">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 2MB</small>
+                                @error('photo')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

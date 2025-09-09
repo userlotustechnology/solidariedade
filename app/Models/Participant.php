@@ -33,6 +33,7 @@ class Participant extends Model
         'employment_status',
         'workplace',
         'has_documents',
+        'photo',
         'observations',
         'active',
         'registered_at',
