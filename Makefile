@@ -86,6 +86,9 @@ npm-dev: ## Compila assets para desenvolvimento
 npm-build: ## Compila assets para produção
 	$(DOCKER_COMPOSE) run --rm node npm run build
 
+npm-watch: ## Compila assets em modo watch
+	$(DOCKER_COMPOSE) run --rm node npm run watch
+
 permissions: ## Corrige permissões dos diretórios
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chown -R www-data:www-data /var/www/html/storage
 	$(DOCKER_COMPOSE) exec $(PHP_CONTAINER) chown -R www-data:www-data /var/www/html/bootstrap/cache

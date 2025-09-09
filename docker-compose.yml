@@ -55,7 +55,7 @@ services:
 
   # Node.js for asset compilation
   node:
-    image: node:18-alpine
+    image: node:20-alpine
     container_name: solidariedade_node
     working_dir: /var/www/html
     volumes:
