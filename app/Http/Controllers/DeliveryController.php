@@ -35,14 +35,16 @@ class DeliveryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'title' => 'required|string|max:255',
             'delivery_date' => 'required|date|after_or_equal:today',
             'description' => 'nullable|string|max:1000',
             'status' => 'required|in:scheduled,in_progress,completed,cancelled'
         ]);
 
-        Delivery::create($request->all());
+        $validated['created_by'] = Auth::id();
+
+        Delivery::create($validated);
 
         return redirect()->route('deliveries.index')
             ->with('success', 'Entrega criada com sucesso!');
