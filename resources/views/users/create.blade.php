@@ -1,12 +1,5 @@
 @extends('layouts.app')
 
-@section('breadcrumbs')
-<li class="breadcrumb-item">
-    <a href="{{ route('users.index') }}">Usuários</a>
-</li>
-<li class="breadcrumb-item active" aria-current="page">Novo Usuário</li>
-@endsection
-
 @section('content')
 <div class="row">
     <div class="col-md-12 grid-margin">

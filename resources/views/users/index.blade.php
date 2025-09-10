@@ -56,7 +56,7 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="table-responsive">
-                                <table id="users-listing" class="table">
+                                <table class="table">
                                     <thead>
                                         <tr class="bg-primary text-white">
                                             <th>ID</th>

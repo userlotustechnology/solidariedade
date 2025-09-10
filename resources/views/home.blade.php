@@ -12,13 +12,9 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h1 class="display-6 fw-bold mb-2">
-                                <i class="ti-dashboard me-3"></i>Dashboard Administrativo
+                                <i class="ti-dashboard me-3"></i>Dashboard
                             </h1>
-                            <p class="fs-5 mb-0 opacity-75">Visão geral da plataforma Escola da Fé</p>
-                        </div>
-                        <div class="text-end">
-                            <div class="fs-6 opacity-75 mb-1">Última atualização:</div>
-                            <div class="fs-5 fw-semibold">{{ date('d/m/Y H:i') }}</div>
+                            <p class="fs-5 mb-0 opacity-75">Visão geral da plataforma</p>
                         </div>
                     </div>
                 </div>

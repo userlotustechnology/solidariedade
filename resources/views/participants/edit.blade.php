@@ -2,13 +2,6 @@
 
 @section('page-title', 'Editar Participante')
 
-@section('breadcrumbs')
-<li class="breadcrumb-item">
-    <a href="{{ route('participants.index') }}">Participantes</a>
-</li>
-<li class="breadcrumb-item active" aria-current="page">Editar Participante</li>
-@endsection
-
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
