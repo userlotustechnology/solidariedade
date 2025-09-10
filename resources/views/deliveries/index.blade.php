@@ -216,7 +216,7 @@
                 <div class="card-body p-0">
                     @if($deliveries->count() > 0)
                         <div class="table-responsive">
-                            <table id="deliveries-listing" class="table table-hover mb-0">
+                            <table class="table table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="border-0 py-3 ps-4">
