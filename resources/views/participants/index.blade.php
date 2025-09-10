@@ -80,7 +80,6 @@
                                             <th>Participante</th>
                                             <th>Documento</th>
                                             <th>Contato</th>
-                                            <th>Família</th>
                                             <th>Status</th>
                                             <th>Cadastrado em</th>
                                             <th class="text-center">Ações</th>
@@ -120,12 +119,6 @@
                                                             </div>
                                                         @endif
                                                     </div>
-                                                </td>
-                                                <td>
-                                                    <span class="badge bg-info">
-                                                        {{ $participant->family_members ?? 1 }}
-                                                        {{ ($participant->family_members ?? 1) == 1 ? 'pessoa' : 'pessoas' }}
-                                                    </span>
                                                 </td>
                                                 <td>
                                                     @if($participant->active ?? true)

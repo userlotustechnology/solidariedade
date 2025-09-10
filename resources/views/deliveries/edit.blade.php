@@ -1,225 +1,194 @@
 @extends('layouts.app')
 
-@section('title', 'Editar Entrega')
-
 @section('content')
-<div class="container-fluid">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="font-weight-bold">Editar Entrega</h3>
+                <h6 class="font-weight-normal mb-0">Edite as informações da entrega</h6>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <!-- Formulário de Edição -->
+@if($errors->any())
     <div class="row">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="card-title text-primary fw-bold mb-0">
-                        <i class="ti-edit me-2"></i>Informações da Entrega
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <form method="POST" action="{{ route('deliveries.update', $delivery) }}">
-                        @csrf
-                        @method('PUT')
+        <div class="col-12">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Erro!</strong> Corrija os campos abaixo:
+                <ul class="mb-0 mt-2">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+@endif
 
-                        <div class="mb-4">
-                            <label for="title" class="form-label fw-semibold">
-                                <i class="ti-bookmark me-1"></i>Título da Entrega
-                                <span class="text-danger">*</span>
-                            </label>
-                            <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                                   name="title" value="{{ old('title', $delivery->title) }}" required autofocus
-                                   placeholder="Digite o título da entrega">
-                            @error('title')
-                                <div class="invalid-feedback">
-                                    <i class="ti-alert-circle me-1"></i>{{ $message }}
-                                </div>
-                            @enderror
-                        </div>
+<form action="{{ route('deliveries.update', $delivery) }}" method="POST">
+    @csrf
+    @method('PUT')
 
-                        <div class="row mb-4">
-                            <div class="col-md-6">
-                                <label for="delivery_date" class="form-label fw-semibold">
-                                    <i class="ti-calendar me-1"></i>Data da Entrega
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <input id="delivery_date" type="date" class="form-control @error('delivery_date') is-invalid @enderror"
-                                       name="delivery_date" value="{{ old('delivery_date', $delivery->delivery_date->format('Y-m-d')) }}" required>
+    <div class="row">
+        <!-- Informações da Entrega -->
+        <div class="col-md-8 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Informações da Entrega</h4>
+
+                    <div class="form-group">
+                        <label for="title">Título da Entrega</label>
+                        <input type="text"
+                               class="form-control @error('title') is-invalid @enderror"
+                               id="title"
+                               name="title"
+                               value="{{ old('title', $delivery->title) }}"
+                               placeholder="Digite o título da entrega"
+                               required>
+                        @error('title')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="delivery_date">Data da Entrega</label>
+                                <input type="date"
+                                       class="form-control @error('delivery_date') is-invalid @enderror"
+                                       id="delivery_date"
+                                       name="delivery_date"
+                                       value="{{ old('delivery_date', $delivery->delivery_date->format('Y-m-d')) }}"
+                                       required>
                                 @error('delivery_date')
-                                    <div class="invalid-feedback">
-                                        <i class="ti-alert-circle me-1"></i>{{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-6">
-                                <label for="status" class="form-label fw-semibold">
-                                    <i class="ti-flag me-1"></i>Status
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <select id="status" class="form-select @error('status') is-invalid @enderror" name="status" required>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="status">Status</label>
+                                <select class="form-control @error('status') is-invalid @enderror"
+                                        id="status"
+                                        name="status"
+                                        required>
                                     <option value="">Selecione o status</option>
-                                    <option value="scheduled" {{ old('status', $delivery->status) === 'scheduled' ? 'selected' : '' }}>
-                                        Agendada
-                                    </option>
-                                    <option value="in_progress" {{ old('status', $delivery->status) === 'in_progress' ? 'selected' : '' }}>
-                                        Em Andamento
-                                    </option>
-                                    <option value="completed" {{ old('status', $delivery->status) === 'completed' ? 'selected' : '' }}>
-                                        Concluída
-                                    </option>
-                                    <option value="cancelled" {{ old('status', $delivery->status) === 'cancelled' ? 'selected' : '' }}>
-                                        Cancelada
-                                    </option>
+                                    <option value="scheduled" {{ old('status', $delivery->status) === 'scheduled' ? 'selected' : '' }}>Agendada</option>
+                                    <option value="in_progress" {{ old('status', $delivery->status) === 'in_progress' ? 'selected' : '' }}>Em Andamento</option>
+                                    <option value="completed" {{ old('status', $delivery->status) === 'completed' ? 'selected' : '' }}>Concluída</option>
+                                    <option value="cancelled" {{ old('status', $delivery->status) === 'cancelled' ? 'selected' : '' }}>Cancelada</option>
                                 </select>
                                 @error('status')
-                                    <div class="invalid-feedback">
-                                        <i class="ti-alert-circle me-1"></i>{{ $message }}
-                                    </div>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
+                    </div>
 
-                        <div class="mb-4">
-                            <label for="description" class="form-label fw-semibold">
-                                <i class="ti-file-text me-1"></i>Descrição
-                            </label>
-                            <textarea id="description" class="form-control @error('description') is-invalid @enderror"
-                                      name="description" rows="4"
-                                      placeholder="Digite uma descrição opcional para a entrega">{{ old('description', $delivery->description) }}</textarea>
-                            @error('description')
-                                <div class="invalid-feedback">
-                                    <i class="ti-alert-circle me-1"></i>{{ $message }}
-                                </div>
-                            @enderror
-                        </div>
-
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="ti-check me-2"></i>Atualizar Entrega
-                            </button>
-                        </div>
-                    </form>
+                    <div class="form-group">
+                        <label for="description">Descrição</label>
+                        <textarea class="form-control @error('description') is-invalid @enderror"
+                                  id="description"
+                                  name="description"
+                                  rows="4"
+                                  placeholder="Descreva os itens que serão entregues ou outras informações importantes">{{ old('description', $delivery->description) }}</textarea>
+                        @error('description')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="form-text text-muted">Descrição opcional para identificar melhor a entrega</small>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Informações Complementares -->
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header bg-white border-0 py-3">
-                    <h5 class="card-title text-primary fw-bold mb-0">
-                        <i class="ti-info me-2"></i>Informações da Entrega
-                    </h5>
-                </div>
-                <div class="card-body p-4">
-                    <div class="mb-3">
-                        <div class="fw-semibold text-muted mb-2">
-                            <i class="ti-clock me-1"></i>Data de Criação
-                        </div>
-                        <div class="bg-light rounded p-3">
-                            {{ $delivery->created_at->format('d/m/Y H:i') }}
+        <!-- Painel de Informações -->
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Informações da Entrega</h4>
+
+                    <div class="form-group">
+                        <label>Status Atual</label>
+                        <div class="bg-light p-3 rounded">
+                            @php
+                                $statusLabels = [
+                                    'scheduled' => 'Agendada',
+                                    'in_progress' => 'Em Andamento',
+                                    'completed' => 'Concluída',
+                                    'cancelled' => 'Cancelada'
+                                ];
+                                $statusColors = [
+                                    'scheduled' => 'warning',
+                                    'in_progress' => 'info',
+                                    'completed' => 'success',
+                                    'cancelled' => 'danger'
+                                ];
+                            @endphp
+                            <span class="badge badge-{{ $statusColors[$delivery->status] ?? 'warning' }}">
+                                {{ $statusLabels[$delivery->status] ?? 'Agendada' }}
+                            </span>
+                            <br>
+                            <small class="text-muted">Status atual da entrega</small>
                         </div>
                     </div>
 
-                    <div class="mb-3">
-                        <div class="fw-semibold text-muted mb-2">
-                            <i class="ti-refresh me-1"></i>Última Atualização
-                        </div>
-                        <div class="bg-light rounded p-3">
-                            {{ $delivery->updated_at->format('d/m/Y H:i') }}
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <div class="fw-semibold text-muted mb-2">
-                            <i class="ti-users me-1"></i>Participantes
-                        </div>
-                        <div class="bg-light rounded p-3">
-                            {{ $delivery->deliveryRecords()->count() }} registros
+                    <div class="form-group">
+                        <label>Data de Criação</label>
+                        <div class="bg-light p-3 rounded">
+                            <strong>{{ $delivery->created_at->format('d/m/Y H:i') }}</strong>
+                            <br>
+                            <small class="text-muted">Entrega criada em</small>
                         </div>
                     </div>
 
-                    @php
-                        $presentCount = $delivery->deliveryRecords()->whereNotNull('delivered_at')->count();
-                        $totalRecords = $delivery->deliveryRecords()->count();
-                        $progressPercentage = $totalRecords > 0 ? ($presentCount / $totalRecords) * 100 : 0;
-                    @endphp
-
-                    <div class="mb-3">
-                        <div class="fw-semibold text-muted mb-2">
-                            <i class="ti-bar-chart me-1"></i>Progresso da Entrega
-                        </div>
-                        <div class="bg-light rounded p-3">
-                            <div class="d-flex justify-content-between align-items-center mb-1">
-                                <span>{{ $presentCount }}/{{ $totalRecords }}</span>
-                                <span class="fw-bold">{{ number_format($progressPercentage, 1) }}%</span>
-                            </div>
-                            <div class="progress" style="height: 8px;">
-                                <div class="progress-bar bg-success" style="width: {{ $progressPercentage }}%"></div>
-                            </div>
+                    <div class="form-group">
+                        <label>Participantes</label>
+                        <div class="bg-light p-3 rounded">
+                            <strong>{{ $delivery->participants->count() }} participante(s)</strong>
+                            <br>
+                            <small class="text-muted">Selecionados para esta entrega</small>
                         </div>
                     </div>
 
-                    <div class="border-top pt-3 mt-3">
-                        <div class="fw-semibold text-muted mb-2">
-                            <i class="ti-settings me-1"></i>Ações Rápidas
-                        </div>
+                    <div class="form-group">
+                        <label>Ações Rápidas</label>
                         <div class="d-grid gap-2">
-                            <a href="{{ route('deliveries.show', $delivery) }}" class="btn btn-outline-primary btn-sm">
-                                <i class="ti-users me-1"></i>Ver Participantes
+                            <a href="{{ route('deliveries.show', $delivery) }}" class="btn btn-outline-info btn-sm">
+                                Ver Detalhes
                             </a>
-                            <a href="{{ route('deliveries.index') }}" class="btn btn-outline-secondary btn-sm">
-                                <i class="ti-list me-1"></i>Lista de Entregas
-                            </a>
+                            @if($delivery->participants->count() > 0)
+                                <a href="{{ route('deliveries.show', $delivery) }}#participants" class="btn btn-outline-primary btn-sm">
+                                    Gerenciar Participantes
+                                </a>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <!-- Botões de Ação -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <a href="{{ route('deliveries.index') }}" class="btn btn-outline-secondary">
+                                Voltar para Lista
+                            </a>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            Atualizar Entrega
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
 @endsection
-
-@push('styles')
-<style>
-    .card {
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-    }
-
-    .form-control:focus,
-    .form-select:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-    }
-
-    .btn {
-        transition: all 0.2s ease;
-    }
-
-    .btn:hover {
-        transform: translateY(-1px);
-    }
-
-    .progress {
-        border-radius: 0.5rem;
-    }
-
-    .progress-bar {
-        border-radius: 0.5rem;
-    }
-
-    .bg-light {
-        background-color: #f8f9fa !important;
-    }
-
-    .fw-bold {
-        font-weight: 600 !important;
-    }
-
-    .text-white-50 {
-        color: rgba(255, 255, 255, 0.6) !important;
-    }
-</style>
-@endpush
