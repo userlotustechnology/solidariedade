@@ -428,14 +428,50 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="receives_government_benefit">Recebe Benefício do Governo?</label>
+                                <select class="form-control @error('receives_government_benefit') is-invalid @enderror"
+                                        id="receives_government_benefit"
+                                        name="receives_government_benefit">
+                                    <option value="">Selecione</option>
+                                    <option value="1" {{ old('receives_government_benefit') === '1' ? 'selected' : '' }}>Sim</option>
+                                    <option value="0" {{ old('receives_government_benefit') === '0' ? 'selected' : '' }}>Não</option>
+                                </select>
+                                @error('receives_government_benefit')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group" id="benefit_type_group" style="{{ old('receives_government_benefit') === '1' ? '' : 'display: none;' }}">
+                                <label for="government_benefit_type">Tipo de Benefício</label>
+                                <select class="form-control @error('government_benefit_type') is-invalid @enderror"
+                                        id="government_benefit_type"
+                                        name="government_benefit_type">
+                                    <option value="">Selecione o benefício</option>
+                                    <option value="Bolsa Família" {{ old('government_benefit_type') === 'Bolsa Família' ? 'selected' : '' }}>Bolsa Família</option>
+                                    <option value="Auxílio Brasil" {{ old('government_benefit_type') === 'Auxílio Brasil' ? 'selected' : '' }}>Auxílio Brasil</option>
+                                    <option value="BPC" {{ old('government_benefit_type') === 'BPC' ? 'selected' : '' }}>BPC</option>
+                                    <option value="Auxílio Emergencial" {{ old('government_benefit_type') === 'Auxílio Emergencial' ? 'selected' : '' }}>Auxílio Emergencial</option>
+                                    <option value="Outros" {{ old('government_benefit_type') === 'Outros' ? 'selected' : '' }}>Outros</option>
+                                </select>
+                                @error('government_benefit_type')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
-                        <label for="additional_notes">Observações Adicionais</label>
-                        <textarea class="form-control @error('additional_notes') is-invalid @enderror"
-                                  id="additional_notes"
-                                  name="additional_notes"
+                        <label for="observations">Observações Adicionais</label>
+                        <textarea class="form-control @error('observations') is-invalid @enderror"
+                                  id="observations"
+                                  name="observations"
                                   rows="3"
-                                  placeholder="Informações adicionais sobre o participante">{{ old('additional_notes') }}</textarea>
-                        @error('additional_notes')
+                                  placeholder="Informações adicionais sobre o participante">{{ old('observations') }}</textarea>
+                        @error('observations')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -462,4 +498,22 @@
         </div>
     </div>
 </form>
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const benefitSelect = document.getElementById('receives_government_benefit');
+    const benefitTypeGroup = document.getElementById('benefit_type_group');
+
+    benefitSelect.addEventListener('change', function() {
+        if (this.value === '1') {
+            benefitTypeGroup.style.display = '';
+        } else {
+            benefitTypeGroup.style.display = 'none';
+            document.getElementById('government_benefit_type').value = '';
+        }
+    });
+});
+</script>
+@endpush
 @endsection

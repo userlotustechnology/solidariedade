@@ -151,13 +151,11 @@
                                                            title="Editar">
                                                             <i class="ti-pencil"></i>
                                                         </a>
-                                                        @if(Route::has('participants.print'))
-                                                            <a href="{{ route('participants.print', $participant) }}"
-                                                               class="btn btn-outline-info btn-sm"
-                                                               title="Imprimir">
-                                                                <i class="ti-printer"></i>
-                                                            </a>
-                                                        @endif
+                                                        <a href="{{ route('participants.card', $participant) }}"
+                                                           class="btn btn-outline-info btn-sm"
+                                                           title="Ver Cartão" target="_blank">
+                                                            <i class="ti-id-badge"></i>
+                                                        </a>
                                                         <form action="{{ route('participants.destroy', $participant) }}"
                                                               method="POST"
                                                               style="display: inline;"

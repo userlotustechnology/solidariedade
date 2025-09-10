@@ -471,11 +471,11 @@
                     <div>
                         @can('participants.update')
                             <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning">
-                                Editar Participante
+                                <i class="ti-pencil"></i> Editar Participante
                             </a>
                         @endcan
-                        <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
-                            Imprimir Ficha
+                        <a href="{{ route('participants.card', $participant) }}" class="btn btn-info" target="_blank">
+                            <i class="ti-id-badge"></i> Ver Cartão
                         </a>
                     </div>
                     <div>

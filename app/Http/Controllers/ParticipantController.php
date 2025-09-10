@@ -6,6 +6,7 @@ use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class ParticipantController extends Controller
 {
@@ -221,13 +222,12 @@ class ParticipantController extends Controller
     }
 
     /**
-     * Print participant record
+     * Show participant card for viewing/printing
      */
-    public function print(Participant $participant)
+    public function showCard(Participant $participant)
     {
         $participant->load(['registeredBy', 'deliveryRecords.delivery', 'deliveryRecords.deliveredBy']);
-
-        return view('participants.print', compact('participant'));
+        return view('participants.card-image', compact('participant'));
     }
 
     /**

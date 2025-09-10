@@ -21,7 +21,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // Participantes
     Route::resource('participants', ParticipantController::class);
-    Route::get('participants/{participant}/print', [ParticipantController::class, 'print'])->name('participants.print');
+    Route::get('participants/{participant}/card', [ParticipantController::class, 'showCard'])->name('participants.card');
 
     // Entregas
     Route::resource('deliveries', DeliveryController::class);

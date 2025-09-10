@@ -368,16 +368,16 @@
                     </div>
 
                     <div class="form-group" id="benefit_type_group" style="{{ old('receives_government_benefit', $participant->receives_government_benefit) == '1' ? '' : 'display: none;' }}">
-                        <label for="benefit_type">Tipo de Benefício</label>
-                        <select id="benefit_type" class="form-control @error('benefit_type') is-invalid @enderror" name="benefit_type">
+                        <label for="government_benefit_type">Tipo de Benefício</label>
+                        <select id="government_benefit_type" class="form-control @error('government_benefit_type') is-invalid @enderror" name="government_benefit_type">
                             <option value="">Selecione o benefício</option>
-                            <option value="Bolsa Família" {{ old('benefit_type', $participant->benefit_type) === 'Bolsa Família' ? 'selected' : '' }}>Bolsa Família</option>
-                            <option value="Auxílio Brasil" {{ old('benefit_type', $participant->benefit_type) === 'Auxílio Brasil' ? 'selected' : '' }}>Auxílio Brasil</option>
-                            <option value="BPC" {{ old('benefit_type', $participant->benefit_type) === 'BPC' ? 'selected' : '' }}>BPC</option>
-                            <option value="Auxílio Emergencial" {{ old('benefit_type', $participant->benefit_type) === 'Auxílio Emergencial' ? 'selected' : '' }}>Auxílio Emergencial</option>
-                            <option value="Outros" {{ old('benefit_type', $participant->benefit_type) === 'Outros' ? 'selected' : '' }}>Outros</option>
+                            <option value="Bolsa Família" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Bolsa Família' ? 'selected' : '' }}>Bolsa Família</option>
+                            <option value="Auxílio Brasil" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Auxílio Brasil' ? 'selected' : '' }}>Auxílio Brasil</option>
+                            <option value="BPC" {{ old('government_benefit_type', $participant->government_benefit_type) === 'BPC' ? 'selected' : '' }}>BPC</option>
+                            <option value="Auxílio Emergencial" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Auxílio Emergencial' ? 'selected' : '' }}>Auxílio Emergencial</option>
+                            <option value="Outros" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Outros' ? 'selected' : '' }}>Outros</option>
                         </select>
-                        @error('benefit_type')
+                        @error('government_benefit_type')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
@@ -471,7 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Controle do campo de tipo de benefício
     const benefitSelect = document.getElementById('receives_government_benefit');
     const benefitTypeGroup = document.getElementById('benefit_type_group');
-    const benefitTypeSelect = document.getElementById('benefit_type');
+    const benefitTypeSelect = document.getElementById('government_benefit_type');
 
     benefitSelect.addEventListener('change', function() {
         if (this.value === '1') {

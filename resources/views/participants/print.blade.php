@@ -4,465 +4,430 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ficha do Participante - {{ $participant->name }}</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        @media print {
-            body { font-size: 12px; }
-            .page-break { page-break-before: always; }
-            .no-print { display: none; }
-            .card { border: 1px solid #ddd !important; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #333;
             background: white;
         }
-        .header-logo {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #0066cc;
-            padding-bottom: 15px;
+
+        @media print {
+            body {
+                font-size: 10px;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .no-print { display: none !important; }
         }
-        .participant-photo {
-            max-width: 120px;
-            max-height: 150px;
-            object-fit: cover;
-            border: 2px solid #ddd;
-        }
-        .info-section {
-            margin-bottom: 20px;
-        }
-        .info-label {
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 5px;
-        }
-        .info-value {
-            background-color: #f8f9fa;
-            padding: 8px;
-            border: 1px solid #dee2e6;
-            border-radius: 4px;
-            margin-bottom: 10px;
-        }
-        .section-title {
-            background-color: #0066cc;
-            color: white;
-            padding: 8px 15px;
-            margin: 20px 0 15px 0;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        .badge-print {
-            background-color: #6c757d;
-            color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 0.8em;
-        }
-        .badge-success-print { background-color: #198754; }
-        .badge-warning-print { background-color: #ffc107; color: #000; }
-        .badge-danger-print { background-color: #dc3545; }
-        .badge-info-print { background-color: #0dcaf0; color: #000; }
-        .delivery-table {
+
+        .container {
+            max-width: 100%;
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+            border: 2px solid #0066cc;
+            padding: 15px;
         }
-        .delivery-table th,
-        .delivery-table td {
-            border: 1px solid #ddd;
+
+        .header {
+            text-align: center;
+            border-bottom: 3px solid #0066cc;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);
+            padding: 12px;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            color: #0066cc;
+            font-weight: bold;
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 10px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .photo-section {
+            float: right;
+            width: 90px;
+            margin-left: 15px;
+            margin-bottom: 15px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             padding: 8px;
-            text-align: left;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        .delivery-table th {
-            background-color: #f8f9fa;
+
+        .photo {
+            width: 74px;
+            height: 90px;
+            border: 1px solid #ddd;
+            object-fit: cover;
+            border-radius: 4px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .no-photo {
+            width: 74px;
+            height: 90px;
+            border: 1px solid #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f8f9fa;
+            border-radius: 4px;
+            font-size: 9px;
+            color: #666;
+            text-align: center;
+            margin: 0 auto;
+        }
+
+        .section {
+            margin-bottom: 15px;
+            clear: both;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .section-title {
+            background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+            color: white;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .section-content {
+            padding: 10px 12px;
+            background: #fdfdfd;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .row:last-child {
+            margin-bottom: 0;
+        }
+
+        .col-2 { width: 16.66%; }
+        .col-3 { width: 25%; }
+        .col-4 { width: 33.33%; }
+        .col-6 { width: 50%; }
+        .col-8 { width: 66.66%; }
+        .col-12 { width: 100%; }
+
+        .field {
+            padding: 0 6px 0 0;
+        }
+
+        .label {
+            font-weight: 600;
+            font-size: 9px;
+            color: #555;
+            margin-bottom: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .value {
+            background: white;
+            border: 1px solid #d0d0d0;
+            padding: 6px 8px;
+            font-size: 10px;
+            border-radius: 3px;
+            min-height: 24px;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: #d4edda !important;
+            color: #155724 !important;
+            border-color: #c3e6cb !important;
             font-weight: bold;
         }
+
+        .status-inactive {
+            background: #f8d7da !important;
+            color: #721c24 !important;
+            border-color: #f5c6cb !important;
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 20px;
+            border-top: 2px solid #0066cc;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 9px;
+            color: #666;
+            background: #f8f9ff;
+            padding: 10px;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .observations {
+            min-height: 40px;
+            line-height: 1.4;
+        }
+
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+
+        /* Quebras de linha compactas */
+        br { line-height: 0.8; }
+
+        /* Ícones usando símbolos */
+        .icon-user::before { content: "👤 "; }
+        .icon-contact::before { content: "📞 "; }
+        .icon-address::before { content: "📍 "; }
+        .icon-money::before { content: "💰 "; }
+        .icon-note::before { content: "📝 "; }
+        .icon-admin::before { content: "⚙️ "; }
+        .text-right { text-align: right; }
+
+        /* Quebras de linha compactas */
+        br { line-height: 0.5; }
     </style>
 </head>
 <body>
-    <div class="container mt-4">
-        <!-- Botão de Impressão -->
-        <div class="no-print mb-3">
-            <button onclick="window.print()" class="btn btn-primary">
-                <i class="fas fa-print"></i> Imprimir Ficha
-            </button>
-            <a href="{{ route('participants.show', $participant) }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Voltar
-            </a>
-        </div>
-
+    <div class="container">
         <!-- Cabeçalho -->
-        <div class="header-logo">
-            <h2>FICHA DO PARTICIPANTE</h2>
-            <h4>Sistema de Solidariedade</h4>
+        <div class="header">
+            <h1>FICHA DO PARTICIPANTE</h1>
+            <p>Sistema de Solidariedade - Gerado em {{ now()->format('d/m/Y H:i') }}</p>
         </div>
 
-        <div class="row">
-            <!-- Informações Pessoais -->
-            <div class="col-md-8">
-                <div class="section-title">
-                    <i class="fas fa-user"></i> INFORMAÇÕES PESSOAIS
+        <!-- Foto -->
+        <div class="photo-section">
+            @if($participant->photo)
+                <img src="{{ asset('storage/' . $participant->photo) }}"
+                     alt="Foto" class="photo">
+            @else
+                <div class="no-photo">
+                    SEM<br>FOTO
                 </div>
+            @endif
+        </div>
 
+        <!-- Informações Pessoais -->
+        <div class="section">
+            <div class="section-title icon-user">DADOS PESSOAIS</div>
+            <div class="section-content">
                 <div class="row">
-                    <div class="col-md-6">
-                        <div class="info-label">Nome Completo</div>
-                        <div class="info-value">{{ $participant->name }}</div>
+                    <div class="col-6 field">
+                        <div class="label">Nome Completo</div>
+                        <div class="value">{{ $participant->name }}</div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="info-label">Idade</div>
-                        <div class="info-value">{{ $participant->age }} anos</div>
+                    <div class="col-3 field">
+                        <div class="label">Idade</div>
+                        <div class="value">{{ $participant->age }} anos</div>
                     </div>
-                    <div class="col-md-3">
-                        <div class="info-label">Gênero</div>
-                        <div class="info-value">
-                            @if($participant->gender === 'M')
-                                Masculino
-                            @elseif($participant->gender === 'F')
-                                Feminino
-                            @elseif($participant->gender === 'Other')
-                                Outro
-                            @else
-                                Não informado
-                            @endif
+                    <div class="col-3 field">
+                        <div class="label">Gênero</div>
+                        <div class="value">
+                            @if($participant->gender === 'M') Masculino
+                            @elseif($participant->gender === 'F') Feminino
+                            @elseif($participant->gender === 'Other') Outro
+                            @else Não informado @endif
                         </div>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-4">
-                        <div class="info-label">Estado Civil</div>
-                        <div class="info-value">
+                    <div class="col-3 field">
+                        <div class="label">Data Nascimento</div>
+                        <div class="value">{{ $participant->birth_date->format('d/m/Y') }}</div>
+                    </div>
+                    <div class="col-3 field">
+                        <div class="label">Estado Civil</div>
+                        <div class="value">
                             @switch($participant->marital_status)
-                                @case('solteiro')
-                                    Solteiro(a)
-                                    @break
-                                @case('casado')
-                                    Casado(a)
-                                    @break
-                                @case('divorciado')
-                                    Divorciado(a)
-                                    @break
-                                @case('viuvo')
-                                    Viúvo(a)
-                                    @break
-                                @case('uniao_estavel')
-                                    União Estável
-                                    @break
-                                @default
-                                    Não informado
+                                @case('solteiro') Solteiro(a) @break
+                                @case('casado') Casado(a) @break
+                                @case('divorciado') Divorciado(a) @break
+                                @case('viuvo') Viúvo(a) @break
+                                @case('uniao_estavel') União Estável @break
+                                @default Não informado
                             @endswitch
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="info-label">Tipo de Documento</div>
-                        <div class="info-value">{{ $participant->document_type }}</div>
+                    <div class="col-3 field">
+                        <div class="label">{{ $participant->document_type ?? 'Documento' }}</div>
+                        <div class="value">{{ $participant->document_number }}</div>
                     </div>
-                    <div class="col-md-4">
-                        <div class="info-label">Número do Documento</div>
-                        <div class="info-value">{{ $participant->formatted_document }}</div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="info-label">Data de Nascimento</div>
-                        <div class="info-value">{{ $participant->birth_date->format('d/m/Y') }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label">Telefone</div>
-                        <div class="info-value">{{ $participant->formatted_phone ?: 'Não informado' }}</div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="info-label">E-mail</div>
-                        <div class="info-value">{{ $participant->email ?: 'Não informado' }}</div>
+                    <div class="col-3 field">
+                        <div class="label">Status</div>
+                        <div class="value {{ $participant->active ? 'status-active' : 'status-inactive' }}">
+                            {{ $participant->active ? 'ATIVO' : 'INATIVO' }}
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Foto -->
-            <div class="col-md-4">
-                <div class="section-title">
-                    <i class="fas fa-camera"></i> FOTO
-                </div>
-                <div class="text-center">
-                    @if($participant->photo)
-                        <img src="{{ asset('storage/' . $participant->photo) }}"
-                             alt="Foto de {{ $participant->name }}"
-                             class="participant-photo img-fluid rounded">
-                    @else
-                        <div class="border rounded d-flex align-items-center justify-content-center bg-light participant-photo" style="height: 150px; width: 120px; margin: 0 auto;">
-                            <div class="text-center text-muted">
-                                <i class="fas fa-user fa-2x mb-2"></i>
-                                <p class="mb-0 small">Sem foto</p>
-                            </div>
-                        </div>
-                    @endif
+        <!-- Contato -->
+        <div class="section">
+            <div class="section-title icon-contact">CONTATO</div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-4 field">
+                        <div class="label">Telefone</div>
+                        <div class="value">{{ $participant->formatted_phone ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-8 field">
+                        <div class="label">E-mail</div>
+                        <div class="value">{{ $participant->email ?? 'Não informado' }}</div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Endereço -->
-        <div class="section-title">
-            <i class="fas fa-map-marker-alt"></i> ENDEREÇO
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info-label">Endereço</div>
-                <div class="info-value">{{ $participant->address }}</div>
-            </div>
-            <div class="col-md-3">
-                <div class="info-label">Complemento</div>
-                <div class="info-value">{{ $participant->address_complement ?: 'Não informado' }}</div>
-            </div>
-            <div class="col-md-3">
-                <div class="info-label">Bairro</div>
-                <div class="info-value">{{ $participant->neighborhood }}</div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-5">
-                <div class="info-label">Cidade</div>
-                <div class="info-value">{{ $participant->city }}</div>
-            </div>
-            <div class="col-md-2">
-                <div class="info-label">Estado</div>
-                <div class="info-value">{{ $participant->state }}</div>
-            </div>
-            <div class="col-md-3">
-                <div class="info-label">CEP</div>
-                <div class="info-value">{{ $participant->zip_code }}</div>
-            </div>
-        </div>
-
-        <!-- Informações Familiares -->
-        <div class="section-title">
-            <i class="fas fa-users"></i> INFORMAÇÕES FAMILIARES
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="info-label">Pessoas na Família</div>
-                <div class="info-value">
-                    {{ $participant->family_members }}
-                    {{ $participant->family_members === 1 ? 'pessoa' : 'pessoas' }}
+        <div class="section">
+            <div class="section-title icon-address">ENDEREÇO</div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-6 field">
+                        <div class="label">Logradouro</div>
+                        <div class="value">{{ $participant->address ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-2 field">
+                        <div class="label">Número</div>
+                        <div class="value">{{ $participant->address_number ?? 'S/N' }}</div>
+                    </div>
+                    <div class="col-4 field">
+                        <div class="label">Complemento</div>
+                        <div class="value">{{ $participant->address_complement ?? '-' }}</div>
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-4">
-                <div class="info-label">Renda Mensal Familiar</div>
-                <div class="info-value">
-                    @if($participant->monthly_income)
-                        R$ {{ number_format($participant->monthly_income, 2, ',', '.') }}
-                    @else
-                        Não informado
-                    @endif
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="info-label">Renda per capita</div>
-                <div class="info-value">
-                    @if($participant->monthly_income)
-                        R$ {{ number_format($participant->monthly_income / $participant->family_members, 2, ',', '.') }}
-                    @else
-                        Não calculado
-                    @endif
+
+                <div class="row">
+                    <div class="col-4 field">
+                        <div class="label">Bairro</div>
+                        <div class="value">{{ $participant->neighborhood ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-4 field">
+                        <div class="label">Cidade</div>
+                        <div class="value">{{ $participant->city ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-2 field">
+                        <div class="label">UF</div>
+                        <div class="value">{{ $participant->state ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-2 field">
+                        <div class="label">CEP</div>
+                        <div class="value">{{ $participant->zip_code ?? 'Não informado' }}</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Benefícios e Documentação -->
-        <div class="section-title">
-            <i class="fas fa-file-alt"></i> BENEFÍCIOS E DOCUMENTAÇÃO
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="info-label">Recebe Benefício do Governo</div>
-                <div class="info-value">
-                    @if($participant->receives_government_benefit)
-                        <span class="badge-print badge-success-print">Sim</span>
-                    @else
-                        <span class="badge-print">Não</span>
-                    @endif
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="info-label">Tipo de Benefício</div>
-                <div class="info-value">{{ $participant->government_benefit_type ?: 'Não informado' }}</div>
-            </div>
-            <div class="col-md-4">
-                <div class="info-label">Possui Documentos Básicos</div>
-                <div class="info-value">
-                    @if($participant->has_documents)
-                        <span class="badge-print badge-success-print">Sim</span>
-                    @else
-                        <span class="badge-print badge-warning-print">Não</span>
-                    @endif
-                    <br><small>RG, CPF, Comprovante de residência</small>
-                </div>
-            </div>
-        </div>
-
-        <!-- Situação Trabalhista -->
-        <div class="section-title">
-            <i class="fas fa-briefcase"></i> SITUAÇÃO TRABALHISTA
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="info-label">Situação de Trabalho</div>
-                <div class="info-value">
-                    @switch($participant->employment_status)
-                        @case('empregado')
-                            <span class="badge-print badge-success-print">Empregado</span>
-                            @break
-                        @case('desempregado')
-                            <span class="badge-print badge-danger-print">Desempregado</span>
-                            @break
-                        @case('aposentado')
-                            <span class="badge-print badge-info-print">Aposentado</span>
-                            @break
-                        @case('pensionista')
-                            <span class="badge-print badge-info-print">Pensionista</span>
-                            @break
-                        @case('autonomo')
-                            <span class="badge-print badge-warning-print">Autônomo</span>
-                            @break
-                        @default
-                            Não informado
-                    @endswitch
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="info-label">Local de Trabalho</div>
-                <div class="info-value">{{ $participant->workplace ?: 'Não informado' }}</div>
-            </div>
-        </div>
-
-        @if($participant->observations)
+        <!-- Informações Socioeconômicas -->
+        <div class="section">
             <div class="section-title">
-                <i class="fas fa-sticky-note"></i> OBSERVAÇÕES
+                <i class="icon-socio"></i>DADOS SOCIOECONÔMICOS
             </div>
-            <div class="info-value">{{ $participant->observations }}</div>
-        @endif
-
-        <!-- Histórico de Entregas -->
-        <div class="section-title">
-            <i class="fas fa-history"></i> HISTÓRICO DE ENTREGAS
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-3 field">
+                        <div class="label">Pessoas na Família</div>
+                        <div class="value">{{ $participant->family_members ?? 'Não informado' }}</div>
+                    </div>
+                    <div class="col-3 field">
+                        <div class="label">Renda Familiar</div>
+                        <div class="value">
+                            @if($participant->monthly_income)
+                                R$ {{ number_format($participant->monthly_income, 2, ',', '.') }}
+                            @else
+                                Não informado
+                            @endif
+                        </div>
+                    </div>
+                <div class="col-3 field">
+                    <div class="label">Recebe Benefício?</div>
+                    <div class="value">
+                        @if($participant->receives_government_benefit === 1) Sim
+                        @elseif($participant->receives_government_benefit === 0) Não
+                        @else Não informado @endif
+                    </div>
+                </div>
+                <div class="col-3 field">
+                    <div class="label">Tipo de Benefício</div>
+                    <div class="value">{{ $participant->benefit_type ?? '-' }}</div>
+                </div>
+            </div>
+            </div>
         </div>
 
-        @if($participant->deliveryRecords->count() > 0)
-            <table class="delivery-table">
-                <thead>
-                    <tr>
-                        <th>Data da Entrega</th>
-                        <th>Título</th>
-                        <th>Data do Recebimento</th>
-                        <th>Entregue por</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach($participant->deliveryRecords->sortByDesc('delivery.delivery_date') as $record)
-                        <tr>
-                            <td>{{ $record->delivery->delivery_date->format('d/m/Y') }}</td>
-                            <td>{{ $record->delivery->title }}</td>
-                            <td>
-                                @if($record->delivered_at)
-                                    {{ $record->delivered_at->format('d/m/Y H:i') }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>
-                                @if($record->deliveredBy)
-                                    {{ $record->deliveredBy->name }}
-                                @else
-                                    -
-                                @endif
-                            </td>
-                            <td>
-                                @if($record->delivered_at)
-                                    <span class="badge-print badge-success-print">Recebido</span>
-                                @else
-                                    <span class="badge-print badge-warning-print">Pendente</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-
-            <!-- Estatísticas -->
-            <div class="row mt-3">
-                <div class="col-md-4">
-                    <div class="info-label">Cestas Recebidas</div>
-                    <div class="info-value text-center">
-                        <strong>{{ $participant->deliveryRecords->whereNotNull('delivered_at')->count() }}</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="info-label">Cestas Pendentes</div>
-                    <div class="info-value text-center">
-                        <strong>{{ $participant->deliveryRecords->whereNull('delivered_at')->count() }}</strong>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="info-label">Total de Entregas</div>
-                    <div class="info-value text-center">
-                        <strong>{{ $participant->deliveryRecords->count() }}</strong>
+        <!-- Observações -->
+        <div class="section">
+            <div class="section-title">
+                <i class="icon-note"></i>OBSERVAÇÕES
+            </div>
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-12 field">
+                        <div class="value observations">{{ $participant->observations ?? 'Nenhuma observação registrada.' }}</div>
                     </div>
                 </div>
             </div>
-        @else
-            <div class="info-value text-center">
-                <i class="fas fa-info-circle"></i>
-                Este participante ainda não possui histórico de entregas.
-            </div>
-        @endif
+        </div>
 
         <!-- Informações de Cadastro -->
-        <div class="section-title">
-            <i class="fas fa-info-circle"></i> INFORMAÇÕES DE CADASTRO
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="info-label">Cadastrado por</div>
-                <div class="info-value">{{ $participant->registeredBy->name }}</div>
+        <div class="section">
+            <div class="section-title">
+                <i class="icon-register"></i>DADOS DO CADASTRO
             </div>
-            <div class="col-md-4">
-                <div class="info-label">Data do Cadastro</div>
-                <div class="info-value">{{ $participant->registered_at->format('d/m/Y H:i') }}</div>
-            </div>
-            <div class="col-md-4">
-                <div class="info-label">Última Atualização</div>
-                <div class="info-value">{{ $participant->updated_at->format('d/m/Y H:i') }}</div>
-            </div>
-        </div>
-
-        <!-- Status -->
-        <div class="row mt-3">
-            <div class="col-12 text-center">
-                <div class="info-label">Status do Participante</div>
-                <div class="info-value">
-                    @if($participant->active)
-                        <span class="badge-print badge-success-print">PARTICIPANTE ATIVO</span>
-                    @else
-                        <span class="badge-print badge-warning-print">PARTICIPANTE INATIVO</span>
-                    @endif
+            <div class="section-content">
+                <div class="row">
+                    <div class="col-4 field">
+                        <div class="label">Cadastrado por</div>
+                        <div class="value">{{ $participant->registeredBy->name ?? 'Sistema' }}</div>
+                    </div>
+                    <div class="col-4 field">
+                        <div class="label">Data do Cadastro</div>
+                        <div class="value">{{ $participant->registered_at->format('d/m/Y H:i') }}</div>
+                    </div>
+                    <div class="col-4 field">
+                        <div class="label">Última Atualização</div>
+                        <div class="value">{{ $participant->updated_at->format('d/m/Y H:i') }}</div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Rodapé -->
-        <div class="mt-4 text-center" style="border-top: 1px solid #ddd; padding-top: 15px;">
-            <small class="text-muted">
-                Ficha gerada em {{ now()->format('d/m/Y H:i') }} - Sistema de Solidariedade
-            </small>
+        <div class="footer">
+            ID do Participante: {{ $participant->id }} |
+            Ficha gerada automaticamente pelo Sistema de Solidariedade
         </div>
     </div>
 
