@@ -171,7 +171,7 @@
         <div class="col-md-4 grid-margin stretch-card">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">Foto do Participante</h4>
+                    <h4 class="card-title">Foto</h4>
 
                     @if($participant->photo)
                         <div class="text-center mb-3">
@@ -217,14 +217,15 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="zipcode">CEP</label>
+                                <label for="zip_code">CEP</label>
                                 <input type="text"
-                                       class="form-control @error('zipcode') is-invalid @enderror"
-                                       id="zipcode"
-                                       name="zipcode"
-                                       value="{{ old('zipcode', $participant->zipcode) }}"
+                                       class="form-control @error('zip_code') is-invalid @enderror"
+                                       id="zip_code"
+                                       name="zip_code"
+                                       maxlength="8"
+                                       value="{{ old('zip_code', $participant->zip_code) }}"
                                        placeholder="00000-000">
-                                @error('zipcode')
+                                @error('zip_code')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -415,6 +416,21 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="active">Status do Participante</label>
+                                <select id="active" class="form-control @error('active') is-invalid @enderror" name="active" required>
+                                    <option value="1" {{ old('active', $participant->active) == '1' ? 'selected' : '' }}>Ativo</option>
+                                    <option value="0" {{ old('active', $participant->active) == '0' ? 'selected' : '' }}>Inativo</option>
+                                </select>
+                                @error('active')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="observations">Observações</label>
                         <textarea class="form-control @error('observations') is-invalid @enderror"
@@ -434,19 +450,16 @@
     <!-- Botões de Ação -->
     <div class="row">
         <div class="col-12">
-            <div class="d-flex justify-content-between">
-                <div>
-                    <a href="{{ route('participants.show', $participant) }}" class="btn btn-light">
-                        <i class="mdi mdi-arrow-left"></i> Voltar
-                    </a>
-                </div>
-                <div>
-                    <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                        <i class="mdi mdi-cancel"></i> Cancelar
-                    </a>
-                    <button type="submit" class="btn btn-primary ml-2">
-                        <i class="mdi mdi-content-save"></i> Salvar Alterações
-                    </button>
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ route('participants.index') }}" class="btn btn-outline-secondary">
+                            <i class="ti-arrow-left"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="ti-check"></i> Atualizar Participante
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -487,8 +500,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Máscara para CEP
-    const zipcodeInput = document.getElementById('zipcode');
-    zipcodeInput.addEventListener('input', function(e) {
+    const zipCodeInput = document.getElementById('zip_code');
+    zipCodeInput.addEventListener('input', function(e) {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length <= 8) {
             value = value.replace(/(\d{5})(\d{3})/, '$1-$2');

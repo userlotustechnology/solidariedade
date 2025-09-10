@@ -170,7 +170,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="photo">Foto do Participante</label>
+                        <label for="photo">Foto</label>
                         <input type="file"
                                class="form-control @error('photo') is-invalid @enderror"
                                id="photo"
@@ -196,12 +196,12 @@
                              style="width: 100px; height: 100px;">
                             <i class="ti-user" style="font-size: 2.5rem; color: #ccc;"></i>
                         </div>
-                        <p class="text-muted mt-2 small">Foto do participante</p>
+                        <p class="text-muted mt-2 small">Foto</p>
                     </div>
 
                     <div class="form-group">
                         <div class="mb-2">
-                            <strong>Status do Participante</strong>
+                            <strong>Status</strong>
                         </div>
                         <div class="bg-light p-3 rounded">
                             <div class="d-flex align-items-center">
