@@ -219,10 +219,10 @@
                                         <div class="fw-semibold text-dark">Contato</div>
                                     </th>
                                     <th class="border-0 py-3">
-                                        <div class="fw-semibold text-dark">Família</div>
+                                        <div class="fw-semibold text-dark">Status</div>
                                     </th>
                                     <th class="border-0 py-3">
-                                        <div class="fw-semibold text-dark">Status</div>
+                                        <div class="fw-semibold text-dark">Atestado</div>
                                     </th>
                                     <th class="border-0 py-3">
                                         <div class="fw-semibold text-dark">Horário</div>
@@ -241,6 +241,8 @@
                                         $participant = $data['participant'];
                                         $record = $data['record'];
                                         $status = $data['status'];
+                                        $hasValidCertificate = $data['hasValidCertificate'] ?? false;
+                                        $validCertificateExpiry = $data['validCertificateExpiry'] ?? null;
                                     @endphp
                                     <tr data-participant-id="{{ $participantId }}" data-status="{{ $status }}" class="align-middle">
                                         <td class="py-3 ps-4">
@@ -281,15 +283,6 @@
                                             </div>
                                         </td>
                                         <td class="py-3">
-                                            <div>
-                                                <span class="badge bg-info bg-opacity-10 text-info border border-info">
-                                                    <i class="ti-users me-1"></i>
-                                                    {{ $participant->family_members }}
-                                                    {{ $participant->family_members === 1 ? 'pessoa' : 'pessoas' }}
-                                                </span>
-                                            </div>
-                                        </td>
-                                        <td class="py-3">
                                             <span class="status-badge status-{{ $status }}">
                                                 @switch($status)
                                                     @case('present')
@@ -313,6 +306,25 @@
                                                         </span>
                                                 @endswitch
                                             </span>
+                                        </td>
+                                        <td class="py-3">
+                                            @if($hasValidCertificate && $validCertificateExpiry)
+                                                <div class="text-center">
+                                                    <span class="badge bg-success bg-opacity-10 text-success border border-success mb-1">
+                                                        <i class="ti-check me-1"></i>Válido
+                                                    </span>
+                                                    <div>
+                                                        <small class="text-muted">
+                                                            <i class="ti-calendar me-1"></i>
+                                                            até {{ $validCertificateExpiry->format('d/m/Y') }}
+                                                        </small>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="text-center">
+                                                    <span class="text-muted">-</span>
+                                                </div>
+                                            @endif
                                         </td>
                                         <td class="py-3 delivery-time">
                                             @if($record && $record->delivered_at)
@@ -399,6 +411,16 @@
                 <div class="mb-3">
                     <label for="statusText" class="form-label fw-bold text-muted">Status</label>
                     <input type="text" class="form-control bg-light" id="statusText" readonly>
+                </div>
+
+                <div class="mb-3" id="certificateExpiryField" style="display: none;">
+                    <label for="certificateExpiry" class="form-label fw-bold text-muted">Validade do Atestado</label>
+                    <input type="date" class="form-control" id="certificateExpiry"
+                           min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                    <small class="form-text text-muted">
+                        <i class="ti-calendar me-1"></i>
+                        Data até quando o atestado médico é válido.
+                    </small>
                 </div>
 
                 <div class="mb-3">
@@ -553,18 +575,22 @@ document.addEventListener('DOMContentLoaded', function() {
             if (this.classList.contains('mark-present')) {
                 currentStatus = 'present';
                 document.getElementById('statusText').value = 'Presente - Recebeu a cesta';
+                document.getElementById('certificateExpiryField').style.display = 'none';
             } else if (this.classList.contains('mark-absent')) {
                 currentStatus = 'absent';
                 document.getElementById('statusText').value = 'Ausente - Não compareceu';
+                document.getElementById('certificateExpiryField').style.display = 'none';
             } else if (this.classList.contains('mark-excused')) {
                 currentStatus = 'excused';
                 document.getElementById('statusText').value = 'Justificado - Ausência com atestado';
+                document.getElementById('certificateExpiryField').style.display = 'block';
             }
 
             document.getElementById('modalParticipantId').value = currentParticipantId;
             document.getElementById('modalStatus').value = currentStatus;
             document.getElementById('participantName').value = participantName;
             document.getElementById('notesText').value = '';
+            document.getElementById('certificateExpiry').value = '';
 
             // Verificar se Bootstrap está disponível
             if (typeof bootstrap !== 'undefined') {
@@ -582,6 +608,17 @@ document.addEventListener('DOMContentLoaded', function() {
         const participantId = document.getElementById('modalParticipantId').value;
         const status = document.getElementById('modalStatus').value;
         const notes = document.getElementById('notesText').value;
+        const certificateExpiry = document.getElementById('certificateExpiry').value;
+
+        const requestData = {
+            status: status,
+            notes: notes
+        };
+
+        // Incluir data de validade do atestado apenas se for status 'excused' e tiver valor
+        if (status === 'excused' && certificateExpiry) {
+            requestData.medical_certificate_expiry = certificateExpiry;
+        }
 
         fetch(`/deliveries/${deliveryId}/participants/${participantId}/status`, {
             method: 'POST',
@@ -589,10 +626,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
             },
-            body: JSON.stringify({
-                status: status,
-                notes: notes
-            })
+            body: JSON.stringify(requestData)
         })
         .then(response => response.json())
         .then(data => {

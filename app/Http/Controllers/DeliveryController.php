@@ -63,14 +63,25 @@ class DeliveryController extends Controller
             ->orderBy('name')
             ->get();
 
+        // Buscar atestados válidos para todos os participantes
+        $validCertificates = DeliveryRecord::where('status', 'excused')
+            ->whereNotNull('medical_certificate_expiry')
+            ->where('medical_certificate_expiry', '>=', now()->toDateString())
+            ->get()
+            ->keyBy('participant_id');
+
         // Criar array com status de cada participante para esta entrega
         $participantStatuses = [];
         foreach ($participants as $participant) {
             $record = $participant->deliveryRecords->first();
+            $validCertificate = $validCertificates->get($participant->id);
+            
             $participantStatuses[$participant->id] = [
                 'participant' => $participant,
                 'record' => $record,
-                'status' => $this->getParticipantStatus($record)
+                'status' => $this->getParticipantStatus($record),
+                'hasValidCertificate' => $validCertificate !== null,
+                'validCertificateExpiry' => $validCertificate ? $validCertificate->medical_certificate_expiry : null
             ];
         }
 
@@ -84,7 +95,8 @@ class DeliveryController extends Controller
     {
         $request->validate([
             'status' => 'required|in:present,absent,excused',
-            'notes' => 'nullable|string|max:500'
+            'notes' => 'nullable|string|max:500',
+            'medical_certificate_expiry' => 'nullable|date|after:today'
         ]);
 
         $record = DeliveryRecord::firstOrCreate(
@@ -107,16 +119,25 @@ class DeliveryController extends Controller
                 'delivered_at' => now(),
                 'delivered_by' => Auth::id(),
                 'document_verified' => 'sim',
-                'observations' => $request->notes
+                'observations' => $request->notes,
+                'medical_certificate_expiry' => null
             ]);
         } else {
-            $record->update([
+            $updateData = [
                 'status' => $request->status,
                 'delivered_at' => null,
                 'delivered_by' => null,
                 'document_verified' => 'não',
-                'observations' => $request->notes ?: $this->getStatusMessage($request->status)
-            ]);
+                'observations' => $request->notes ?: $this->getStatusMessage($request->status),
+                'medical_certificate_expiry' => null
+            ];
+
+            // Se for status 'excused' e tiver data de validade do atestado
+            if ($request->status === 'excused' && $request->medical_certificate_expiry) {
+                $updateData['medical_certificate_expiry'] = $request->medical_certificate_expiry;
+            }
+
+            $record->update($updateData);
         }
 
         // Atualizar contador da entrega

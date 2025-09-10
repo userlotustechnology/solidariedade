@@ -17,11 +17,13 @@ class DeliveryRecord extends Model
         'delivered_at',
         'document_verified',
         'observations',
-        'delivered_by'
+        'delivered_by',
+        'medical_certificate_expiry'
     ];
 
     protected $casts = [
-        'delivered_at' => 'datetime'
+        'delivered_at' => 'datetime',
+        'medical_certificate_expiry' => 'date'
     ];
 
     /**
@@ -70,5 +72,27 @@ class DeliveryRecord extends Model
     public function scopeToday($query)
     {
         return $query->whereDate('delivered_at', today());
+    }
+
+    /**
+     * Verifica se o atestado médico ainda está válido
+     */
+    public function hasMedicalCertificateValid(): bool
+    {
+        return $this->status === 'excused' 
+            && $this->medical_certificate_expiry 
+            && $this->medical_certificate_expiry->isFuture();
+    }
+
+    /**
+     * Retorna os dias restantes de validade do atestado
+     */
+    public function getMedicalCertificateRemainingDays(): ?int
+    {
+        if (!$this->medical_certificate_expiry) {
+            return null;
+        }
+
+        return now()->diffInDays($this->medical_certificate_expiry, false);
     }
 }

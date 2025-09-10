@@ -18,7 +18,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="alert {{ $participant->active ? 'alert-success' : 'alert-warning' }} d-flex align-items-center mb-0">
                             <div class="mr-3">
                                 <i class="mdi {{ $participant->active ? 'mdi-check-circle' : 'mdi-alert-circle' }} icon-md"></i>
@@ -26,21 +26,6 @@
                             <div>
                                 <strong>Status: {{ $participant->active ? 'Participante Ativo' : 'Participante Inativo' }}</strong>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-right">
-                        <div class="btn-group" role="group">
-                            @can('participants.update')
-                                <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning btn-sm">
-                                    Editar
-                                </a>
-                            @endcan
-                            <a href="{{ route('participants.print', $participant) }}" class="btn btn-info btn-sm" target="_blank">
-                                Imprimir
-                            </a>
-                            <a href="{{ route('participants.index') }}" class="btn btn-secondary btn-sm">
-                                Voltar
-                            </a>
                         </div>
                     </div>
                 </div>
