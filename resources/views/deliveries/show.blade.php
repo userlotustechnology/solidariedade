@@ -685,31 +685,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showAlert(type, message) {
         const alertDiv = document.createElement('div');
-        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show position-fixed`;
+        alertDiv.style.cssText = `
+            top: 80px;
+            right: 20px;
+            z-index: 9999;
+            max-width: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        `;
         alertDiv.innerHTML = `
             ${message}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
 
-        const container = document.querySelector('.container-fluid');
+        // Inserir diretamente no body para posição fixa
+        document.body.appendChild(alertDiv);
 
-        if (container) {
-            // Buscar o primeiro filho direto que seja uma div.row
-            const firstDirectRow = Array.from(container.children).find(child =>
-                child.tagName === 'DIV' && child.classList.contains('row')
-            );
-
-            if (firstDirectRow) {
-                container.insertBefore(alertDiv, firstDirectRow);
-            } else {
-                // Se não encontrar uma div.row como filho direto, adicionar no início
-                container.insertAdjacentElement('afterbegin', alertDiv);
-            }
-        } else {
-            // Fallback: adicionar no body se não encontrar container
-            document.body.insertAdjacentElement('afterbegin', alertDiv);
-        }
-
+        // Auto-remover após 5 segundos
         setTimeout(() => {
             if (alertDiv && alertDiv.parentNode) {
                 alertDiv.remove();
