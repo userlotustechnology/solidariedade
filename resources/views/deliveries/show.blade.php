@@ -247,9 +247,18 @@
                                     <tr data-participant-id="{{ $participantId }}" data-status="{{ $status }}" class="align-middle">
                                         <td class="py-3 ps-4">
                                             <div class="d-flex align-items-center">
-                                                <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
-                                                    <i class="ti-user text-primary"></i>
-                                                </div>
+                                                @if($participant->photo)
+                                                    <div class="me-3">
+                                                        <img src="{{ asset('storage/' . $participant->photo) }}"
+                                                             alt="Foto de {{ $participant->name }}"
+                                                             class="rounded-circle"
+                                                             style="width: 45px; height: 45px; object-fit: cover;">
+                                                    </div>
+                                                @else
+                                                    <div class="bg-primary bg-opacity-10 rounded-circle p-2 me-3 d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                                                        <i class="ti-user text-primary"></i>
+                                                    </div>
+                                                @endif
                                                 <div>
                                                     <h6 class="mb-1 fw-bold">{{ $participant->name }}</h6>
                                                     <small class="text-muted">ID: {{ $participant->id }}</small>
