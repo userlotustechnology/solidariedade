@@ -1,48 +1,63 @@
 @extends('layouts.app')
 
-@section('page-title', 'Editar Participante')
-
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="font-weight-bold">Editar Participante</h3>
+                <h6 class="font-weight-normal mb-0">Atualize as informações do participante {{ $participant->name }}</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if($errors->any())
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <strong>Erro!</strong> Corrija os campos abaixo:
+                <ul class="mb-0 mt-2">
+                    @foreach($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+@endif
+
+<form action="{{ route('participants.update', $participant) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+
+    <div class="row">
+        <!-- Informações Pessoais -->
+        <div class="col-md-8 grid-margin stretch-card">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Editar Participante') }}</h4>
-                    <div>
-                        <a href="{{ route('participants.show', $participant) }}" class="btn btn-info">
-                            <i class="fas fa-eye"></i> Visualizar
-                        </a>
-                    </div>
-                </div>
-
                 <div class="card-body">
-                    <form method="POST" action="{{ route('participants.update', $participant) }}" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
+                    <h4 class="card-title">Informações Pessoais</h4>
 
-                        <!-- Informações Pessoais -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Informações Pessoais</h5>
-                                <hr>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text"
+                               class="form-control @error('name') is-invalid @enderror"
+                               id="name"
+                               name="name"
+                               value="{{ old('name', $participant->name) }}"
+                               placeholder="Digite o nome completo do participante"
+                               required>
+                        @error('name')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="name" class="form-label">{{ __('Nome Completo') }} <span class="text-danger">*</span></label>
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror"
-                                       name="name" value="{{ old('name', $participant->name) }}" required autofocus>
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="document_type" class="form-label">{{ __('Tipo de Documento') }} <span class="text-danger">*</span></label>
-                                <select id="document_type" class="form-select @error('document_type') is-invalid @enderror" name="document_type" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="document_type">Tipo de Documento</label>
+                                <select id="document_type" class="form-control @error('document_type') is-invalid @enderror" name="document_type" required>
                                     <option value="">Selecione</option>
                                     <option value="CPF" {{ old('document_type', $participant->document_type) === 'CPF' ? 'selected' : '' }}>CPF</option>
                                     <option value="RG" {{ old('document_type', $participant->document_type) === 'RG' ? 'selected' : '' }}>RG</option>
@@ -50,51 +65,60 @@
                                     <option value="Passaporte" {{ old('document_type', $participant->document_type) === 'Passaporte' ? 'selected' : '' }}>Passaporte</option>
                                 </select>
                                 @error('document_type')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="document_number" class="form-label">{{ __('Número do Documento') }} <span class="text-danger">*</span></label>
-                                <input id="document_number" type="text" class="form-control @error('document_number') is-invalid @enderror"
-                                       name="document_number" value="{{ old('document_number', $participant->document_number) }}" required>
-                                @error('document_number')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="birth_date" class="form-label">{{ __('Data de Nascimento') }} <span class="text-danger">*</span></label>
-                                <input id="birth_date" type="date" class="form-control @error('birth_date') is-invalid @enderror"
-                                       name="birth_date" value="{{ old('birth_date', $participant->birth_date->format('Y-m-d')) }}" required>
-                                @error('birth_date')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="document_number">Número do Documento</label>
+                                <input type="text"
+                                       class="form-control @error('document_number') is-invalid @enderror"
+                                       id="document_number"
+                                       name="document_number"
+                                       value="{{ old('document_number', $participant->document_number) }}"
+                                       placeholder="Digite o número do documento"
+                                       required>
+                                @error('document_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-2">
-                                <label for="gender" class="form-label">{{ __('Gênero') }}</label>
-                                <select id="gender" class="form-select @error('gender') is-invalid @enderror" name="gender">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="birth_date">Data de Nascimento</label>
+                                <input type="date"
+                                       class="form-control @error('birth_date') is-invalid @enderror"
+                                       id="birth_date"
+                                       name="birth_date"
+                                       value="{{ old('birth_date', $participant->birth_date->format('Y-m-d')) }}"
+                                       required>
+                                @error('birth_date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="gender">Gênero</label>
+                                <select id="gender" class="form-control @error('gender') is-invalid @enderror" name="gender">
                                     <option value="">Não informar</option>
                                     <option value="M" {{ old('gender', $participant->gender) === 'M' ? 'selected' : '' }}>Masculino</option>
                                     <option value="F" {{ old('gender', $participant->gender) === 'F' ? 'selected' : '' }}>Feminino</option>
                                     <option value="Other" {{ old('gender', $participant->gender) === 'Other' ? 'selected' : '' }}>Outro</option>
                                 </select>
                                 @error('gender')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-3">
-                                <label for="marital_status" class="form-label">{{ __('Estado Civil') }}</label>
-                                <select id="marital_status" class="form-select @error('marital_status') is-invalid @enderror" name="marital_status">
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="marital_status">Estado Civil</label>
+                                <select id="marital_status" class="form-control @error('marital_status') is-invalid @enderror" name="marital_status">
                                     <option value="">Selecione</option>
                                     <option value="solteiro" {{ old('marital_status', $participant->marital_status) === 'solteiro' ? 'selected' : '' }}>Solteiro(a)</option>
                                     <option value="casado" {{ old('marital_status', $participant->marital_status) === 'casado' ? 'selected' : '' }}>Casado(a)</option>
@@ -103,454 +127,375 @@
                                     <option value="uniao_estavel" {{ old('marital_status', $participant->marital_status) === 'uniao_estavel' ? 'selected' : '' }}>União Estável</option>
                                 </select>
                                 @error('marital_status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-3">
-                                <label for="phone" class="form-label">{{ __('Celular') }}</label>
-                                <input id="phone" type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                       name="phone" value="{{ old('phone', $participant->formatted_phone) }}" placeholder="(11) 99999-9999">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="phone">Celular</label>
+                                <input type="tel"
+                                       class="form-control @error('phone') is-invalid @enderror"
+                                       id="phone"
+                                       name="phone"
+                                       value="{{ old('phone', $participant->formatted_phone) }}"
+                                       placeholder="(11) 99999-9999">
                                 @error('phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-                            <div class="col-md-4">
-                                <label for="email" class="form-label">{{ __('E-mail') }}</label>
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
-                                       name="email" value="{{ old('email', $participant->email) }}">
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="email">E-mail</label>
+                                <input type="email"
+                                       class="form-control @error('email') is-invalid @enderror"
+                                       id="email"
+                                       name="email"
+                                       value="{{ old('email', $participant->email) }}"
+                                       placeholder="usuario@exemplo.com">
                                 @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-5">
-                                <label for="photo" class="form-label">{{ __('Foto do Participante') }}</label>
-                                <input id="photo" type="file" class="form-control @error('photo') is-invalid @enderror"
-                                       name="photo" accept="image/*">
-                                <small class="form-text text-muted">Formatos aceitos: JPG, PNG, GIF. Tamanho máximo: 2MB</small>
-                                @if($participant->photo)
-                                    <div class="mt-2">
-                                        <small class="text-success">Foto atual: {{ basename($participant->photo) }}</small>
-                                    </div>
-                                @endif
-                                @error('photo')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
+                                    <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                        <!-- Endereço -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Endereço</h5>
-                                <hr>
-                            </div>
-                        </div>
+        <!-- Foto do Participante -->
+        <div class="col-md-4 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Foto do Participante</h4>
 
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <label for="address" class="form-label">{{ __('Endereço') }} <span class="text-danger">*</span></label>
-                                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                                       name="address" value="{{ old('address', $participant->address) }}" required
-                                       placeholder="Rua, Avenida, número">
-                                @error('address')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="address_complement" class="form-label">{{ __('Complemento') }}</label>
-                                <input id="address_complement" type="text" class="form-control @error('address_complement') is-invalid @enderror"
-                                       name="address_complement" value="{{ old('address_complement', $participant->address_complement) }}"
-                                       placeholder="Apto, casa, bloco">
-                                @error('address_complement')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="neighborhood" class="form-label">{{ __('Bairro') }} <span class="text-danger">*</span></label>
-                                <input id="neighborhood" type="text" class="form-control @error('neighborhood') is-invalid @enderror"
-                                       name="neighborhood" value="{{ old('neighborhood', $participant->neighborhood) }}" required>
-                                @error('neighborhood')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                    @if($participant->photo)
+                        <div class="text-center mb-3">
+                            <img src="{{ asset('storage/' . $participant->photo) }}"
+                                 alt="Foto do participante"
+                                 class="img-fluid rounded"
+                                 style="max-height: 200px; max-width: 100%;">
+                            <p class="text-muted mt-2 mb-0">Foto atual</p>
                         </div>
+                    @else
+                        <div class="text-center mb-3">
+                            <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 200px;">
+                                <i class="mdi mdi-account-box-outline" style="font-size: 4rem; color: #ccc;"></i>
+                            </div>
+                            <p class="text-muted mt-2 mb-0">Nenhuma foto cadastrada</p>
+                        </div>
+                    @endif
 
-                        <div class="row mb-3">
-                            <div class="col-md-5">
-                                <label for="city" class="form-label">{{ __('Cidade') }} <span class="text-danger">*</span></label>
-                                <input id="city" type="text" class="form-control @error('city') is-invalid @enderror"
-                                       name="city" value="{{ old('city', $participant->city) }}" required>
-                                @error('city')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-2">
-                                <label for="state" class="form-label">{{ __('Estado') }} <span class="text-danger">*</span></label>
-                                <select id="state" class="form-select @error('state') is-invalid @enderror" name="state" required>
-                                    <option value="">Selecione</option>
-                                    <option value="AC" {{ old('state', $participant->state) === 'AC' ? 'selected' : '' }}>Acre</option>
-                                    <option value="AL" {{ old('state', $participant->state) === 'AL' ? 'selected' : '' }}>Alagoas</option>
-                                    <option value="AP" {{ old('state', $participant->state) === 'AP' ? 'selected' : '' }}>Amapá</option>
-                                    <option value="AM" {{ old('state', $participant->state) === 'AM' ? 'selected' : '' }}>Amazonas</option>
-                                    <option value="BA" {{ old('state', $participant->state) === 'BA' ? 'selected' : '' }}>Bahia</option>
-                                    <option value="CE" {{ old('state', $participant->state) === 'CE' ? 'selected' : '' }}>Ceará</option>
-                                    <option value="DF" {{ old('state', $participant->state) === 'DF' ? 'selected' : '' }}>Distrito Federal</option>
-                                    <option value="ES" {{ old('state', $participant->state) === 'ES' ? 'selected' : '' }}>Espírito Santo</option>
-                                    <option value="GO" {{ old('state', $participant->state) === 'GO' ? 'selected' : '' }}>Goiás</option>
-                                    <option value="MA" {{ old('state', $participant->state) === 'MA' ? 'selected' : '' }}>Maranhão</option>
-                                    <option value="MT" {{ old('state', $participant->state) === 'MT' ? 'selected' : '' }}>Mato Grosso</option>
-                                    <option value="MS" {{ old('state', $participant->state) === 'MS' ? 'selected' : '' }}>Mato Grosso do Sul</option>
-                                    <option value="MG" {{ old('state', $participant->state) === 'MG' ? 'selected' : '' }}>Minas Gerais</option>
-                                    <option value="PA" {{ old('state', $participant->state) === 'PA' ? 'selected' : '' }}>Pará</option>
-                                    <option value="PB" {{ old('state', $participant->state) === 'PB' ? 'selected' : '' }}>Paraíba</option>
-                                    <option value="PR" {{ old('state', $participant->state) === 'PR' ? 'selected' : '' }}>Paraná</option>
-                                    <option value="PE" {{ old('state', $participant->state) === 'PE' ? 'selected' : '' }}>Pernambuco</option>
-                                    <option value="PI" {{ old('state', $participant->state) === 'PI' ? 'selected' : '' }}>Piauí</option>
-                                    <option value="RJ" {{ old('state', $participant->state) === 'RJ' ? 'selected' : '' }}>Rio de Janeiro</option>
-                                    <option value="RN" {{ old('state', $participant->state) === 'RN' ? 'selected' : '' }}>Rio Grande do Norte</option>
-                                    <option value="RS" {{ old('state', $participant->state) === 'RS' ? 'selected' : '' }}>Rio Grande do Sul</option>
-                                    <option value="RO" {{ old('state', $participant->state) === 'RO' ? 'selected' : '' }}>Rondônia</option>
-                                    <option value="RR" {{ old('state', $participant->state) === 'RR' ? 'selected' : '' }}>Roraima</option>
-                                    <option value="SC" {{ old('state', $participant->state) === 'SC' ? 'selected' : '' }}>Santa Catarina</option>
-                                    <option value="SP" {{ old('state', $participant->state) === 'SP' ? 'selected' : '' }}>São Paulo</option>
-                                    <option value="SE" {{ old('state', $participant->state) === 'SE' ? 'selected' : '' }}>Sergipe</option>
-                                    <option value="TO" {{ old('state', $participant->state) === 'TO' ? 'selected' : '' }}>Tocantins</option>
-                                </select>
-                                @error('state')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="zip_code" class="form-label">{{ __('CEP') }} <span class="text-danger">*</span></label>
-                                <input id="zip_code" type="text" class="form-control @error('zip_code') is-invalid @enderror"
-                                       name="zip_code" value="{{ old('zip_code', $participant->zip_code) }}" required>
-                                @error('zip_code')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Informações Familiares -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Informações Familiares</h5>
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-3">
-                                <label for="family_members" class="form-label">{{ __('Pessoas na Família') }} <span class="text-danger">*</span></label>
-                                <input id="family_members" type="number" class="form-control @error('family_members') is-invalid @enderror"
-                                       name="family_members" value="{{ old('family_members', $participant->family_members) }}" required min="1" max="20">
-                                @error('family_members')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-4">
-                                <label for="monthly_income" class="form-label">{{ __('Renda Mensal Familiar') }}</label>
-                                <input id="monthly_income" type="number" class="form-control @error('monthly_income') is-invalid @enderror"
-                                       name="monthly_income" value="{{ old('monthly_income', $participant->monthly_income) }}" step="0.01" min="0"
-                                       placeholder="0,00">
-                                @error('monthly_income')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-3">
-                                <label for="active" class="form-label">{{ __('Status') }} <span class="text-danger">*</span></label>
-                                <select id="active" class="form-select @error('active') is-invalid @enderror" name="active" required>
-                                    <option value="1" {{ old('active', $participant->active) == 1 ? 'selected' : '' }}>Ativo</option>
-                                    <option value="0" {{ old('active', $participant->active) == 0 ? 'selected' : '' }}>Inativo</option>
-                                </select>
-                                @error('active')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Benefícios e Documentação -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Benefícios e Documentação</h5>
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="receives_government_benefit" class="form-label">{{ __('Recebe benefício do governo?') }}</label>
-                                <select id="receives_government_benefit" class="form-select @error('receives_government_benefit') is-invalid @enderror" name="receives_government_benefit">
-                                    <option value="">Selecione</option>
-                                    <option value="1" {{ old('receives_government_benefit', $participant->receives_government_benefit) == '1' ? 'selected' : '' }}>Sim</option>
-                                    <option value="0" {{ old('receives_government_benefit', $participant->receives_government_benefit) == '0' ? 'selected' : '' }}>Não</option>
-                                </select>
-                                @error('receives_government_benefit')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-8">
-                                <label for="government_benefit_type" class="form-label">{{ __('Qual benefício recebe?') }}</label>
-                                <select id="government_benefit_type" class="form-select @error('government_benefit_type') is-invalid @enderror" name="government_benefit_type">
-                                    <option value="">Selecione</option>
-                                    <option value="Auxílio Brasil" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Auxílio Brasil' ? 'selected' : '' }}>Auxílio Brasil</option>
-                                    <option value="BPC" {{ old('government_benefit_type', $participant->government_benefit_type) === 'BPC' ? 'selected' : '' }}>BPC (Benefício de Prestação Continuada)</option>
-                                    <option value="Aposentadoria" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Aposentadoria' ? 'selected' : '' }}>Aposentadoria</option>
-                                    <option value="Pensão por Morte" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Pensão por Morte' ? 'selected' : '' }}>Pensão por Morte</option>
-                                    <option value="Auxílio Doença" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Auxílio Doença' ? 'selected' : '' }}>Auxílio Doença</option>
-                                    <option value="Seguro Desemprego" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Seguro Desemprego' ? 'selected' : '' }}>Seguro Desemprego</option>
-                                    <option value="Vale Gás" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Vale Gás' ? 'selected' : '' }}>Vale Gás</option>
-                                    <option value="Tarifa Social de Energia" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Tarifa Social de Energia' ? 'selected' : '' }}>Tarifa Social de Energia</option>
-                                    <option value="Outro" {{ old('government_benefit_type', $participant->government_benefit_type) === 'Outro' ? 'selected' : '' }}>Outro</option>
-                                </select>
-                                @error('government_benefit_type')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="has_documents" class="form-label">{{ __('Possui documentos básicos?') }}</label>
-                                <select id="has_documents" class="form-select @error('has_documents') is-invalid @enderror" name="has_documents">
-                                    <option value="">Selecione</option>
-                                    <option value="1" {{ old('has_documents', $participant->has_documents) == '1' ? 'selected' : '' }}>Sim</option>
-                                    <option value="0" {{ old('has_documents', $participant->has_documents) == '0' ? 'selected' : '' }}>Não</option>
-                                </select>
-                                <small class="text-muted">RG, CPF, Comprovante de residência</small>
-                                @error('has_documents')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Situação Trabalhista -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-primary">Situação Trabalhista</h5>
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="employment_status" class="form-label">{{ __('Situação de Trabalho') }}</label>
-                                <select id="employment_status" class="form-select @error('employment_status') is-invalid @enderror" name="employment_status">
-                                    <option value="">Selecione</option>
-                                    <option value="empregado" {{ old('employment_status', $participant->employment_status) === 'empregado' ? 'selected' : '' }}>Empregado</option>
-                                    <option value="desempregado" {{ old('employment_status', $participant->employment_status) === 'desempregado' ? 'selected' : '' }}>Desempregado</option>
-                                    <option value="aposentado" {{ old('employment_status', $participant->employment_status) === 'aposentado' ? 'selected' : '' }}>Aposentado</option>
-                                    <option value="pensionista" {{ old('employment_status', $participant->employment_status) === 'pensionista' ? 'selected' : '' }}>Pensionista</option>
-                                    <option value="autonomo" {{ old('employment_status', $participant->employment_status) === 'autonomo' ? 'selected' : '' }}>Autônomo</option>
-                                </select>
-                                @error('employment_status')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                            <div class="col-md-8">
-                                <label for="workplace" class="form-label">{{ __('Local de Trabalho') }}</label>
-                                <input id="workplace" type="text" class="form-control @error('workplace') is-invalid @enderror"
-                                       name="workplace" value="{{ old('workplace', $participant->workplace) }}"
-                                       placeholder="Nome da empresa ou local onde trabalha">
-                                @error('workplace')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-12">
-                                <label for="observations" class="form-label">{{ __('Observações') }}</label>
-                                <textarea id="observations" class="form-control @error('observations') is-invalid @enderror"
-                                          name="observations" rows="3" placeholder="Informações adicionais sobre o participante...">{{ old('observations', $participant->observations) }}</textarea>
-                                @error('observations')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <!-- Informações de Cadastro -->
-                        <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <h5 class="text-secondary">Informações de Cadastro</h5>
-                                <hr>
-                            </div>
-                        </div>
-
-                        <div class="row mb-3">
-                            <div class="col-md-4">
-                                <label for="registered_by" class="form-label">{{ __('Cadastrado por') }}</label>
-                                <input id="registered_by" type="text" class="form-control" value="{{ $participant->registeredBy->name }}" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="registered_at" class="form-label">{{ __('Data do Cadastro') }}</label>
-                                <input id="registered_at" type="text" class="form-control" value="{{ $participant->registered_at->format('d/m/Y H:i') }}" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="updated_at" class="form-label">{{ __('Última Atualização') }}</label>
-                                <input id="updated_at" type="text" class="form-control" value="{{ $participant->updated_at->format('d/m/Y H:i') }}" readonly>
-                            </div>
-                        </div>
-
-                        <div class="row mb-0">
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save"></i> {{ __('Atualizar Participante') }}
-                                </button>
-                                <a href="{{ route('participants.show', $participant) }}" class="btn btn-info">
-                                    {{ __('Visualizar') }}
-                                </a>
-                                <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                                    {{ __('Cancelar') }}
-                                </a>
-                            </div>
-                        </div>
-                    </form>
+                    <div class="form-group">
+                        <label for="photo">Alterar Foto</label>
+                        <input type="file"
+                               class="form-control @error('photo') is-invalid @enderror"
+                               id="photo"
+                               name="photo"
+                               accept="image/*">
+                        @error('photo')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Formato aceito: JPG, PNG, GIF (máx. 2MB)</small>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-@endsection
 
-@push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-@endpush
+    <div class="row">
+        <!-- Endereço -->
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Endereço</h4>
 
-@push('scripts')
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="zipcode">CEP</label>
+                                <input type="text"
+                                       class="form-control @error('zipcode') is-invalid @enderror"
+                                       id="zipcode"
+                                       name="zipcode"
+                                       value="{{ old('zipcode', $participant->zipcode) }}"
+                                       placeholder="00000-000">
+                                @error('zipcode')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="address">Logradouro</label>
+                                <input type="text"
+                                       class="form-control @error('address') is-invalid @enderror"
+                                       id="address"
+                                       name="address"
+                                       value="{{ old('address', $participant->address) }}"
+                                       placeholder="Rua, Avenida, etc.">
+                                @error('address')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="address_number">Número</label>
+                                <input type="text"
+                                       class="form-control @error('address_number') is-invalid @enderror"
+                                       id="address_number"
+                                       name="address_number"
+                                       value="{{ old('address_number', $participant->address_number) }}"
+                                       placeholder="123">
+                                @error('address_number')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="form-group">
+                                <label for="address_complement">Complemento</label>
+                                <input type="text"
+                                       class="form-control @error('address_complement') is-invalid @enderror"
+                                       id="address_complement"
+                                       name="address_complement"
+                                       value="{{ old('address_complement', $participant->address_complement) }}"
+                                       placeholder="Apto, Bloco, etc.">
+                                @error('address_complement')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="neighborhood">Bairro</label>
+                                <input type="text"
+                                       class="form-control @error('neighborhood') is-invalid @enderror"
+                                       id="neighborhood"
+                                       name="neighborhood"
+                                       value="{{ old('neighborhood', $participant->neighborhood) }}"
+                                       placeholder="Nome do bairro">
+                                @error('neighborhood')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="city">Cidade</label>
+                                <input type="text"
+                                       class="form-control @error('city') is-invalid @enderror"
+                                       id="city"
+                                       name="city"
+                                       value="{{ old('city', $participant->city) }}"
+                                       placeholder="Nome da cidade">
+                                @error('city')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="state">UF</label>
+                                <select id="state" class="form-control @error('state') is-invalid @enderror" name="state">
+                                    <option value="">UF</option>
+                                    <option value="AC" {{ old('state', $participant->state) === 'AC' ? 'selected' : '' }}>AC</option>
+                                    <option value="AL" {{ old('state', $participant->state) === 'AL' ? 'selected' : '' }}>AL</option>
+                                    <option value="AP" {{ old('state', $participant->state) === 'AP' ? 'selected' : '' }}>AP</option>
+                                    <option value="AM" {{ old('state', $participant->state) === 'AM' ? 'selected' : '' }}>AM</option>
+                                    <option value="BA" {{ old('state', $participant->state) === 'BA' ? 'selected' : '' }}>BA</option>
+                                    <option value="CE" {{ old('state', $participant->state) === 'CE' ? 'selected' : '' }}>CE</option>
+                                    <option value="DF" {{ old('state', $participant->state) === 'DF' ? 'selected' : '' }}>DF</option>
+                                    <option value="ES" {{ old('state', $participant->state) === 'ES' ? 'selected' : '' }}>ES</option>
+                                    <option value="GO" {{ old('state', $participant->state) === 'GO' ? 'selected' : '' }}>GO</option>
+                                    <option value="MA" {{ old('state', $participant->state) === 'MA' ? 'selected' : '' }}>MA</option>
+                                    <option value="MT" {{ old('state', $participant->state) === 'MT' ? 'selected' : '' }}>MT</option>
+                                    <option value="MS" {{ old('state', $participant->state) === 'MS' ? 'selected' : '' }}>MS</option>
+                                    <option value="MG" {{ old('state', $participant->state) === 'MG' ? 'selected' : '' }}>MG</option>
+                                    <option value="PA" {{ old('state', $participant->state) === 'PA' ? 'selected' : '' }}>PA</option>
+                                    <option value="PB" {{ old('state', $participant->state) === 'PB' ? 'selected' : '' }}>PB</option>
+                                    <option value="PR" {{ old('state', $participant->state) === 'PR' ? 'selected' : '' }}>PR</option>
+                                    <option value="PE" {{ old('state', $participant->state) === 'PE' ? 'selected' : '' }}>PE</option>
+                                    <option value="PI" {{ old('state', $participant->state) === 'PI' ? 'selected' : '' }}>PI</option>
+                                    <option value="RJ" {{ old('state', $participant->state) === 'RJ' ? 'selected' : '' }}>RJ</option>
+                                    <option value="RN" {{ old('state', $participant->state) === 'RN' ? 'selected' : '' }}>RN</option>
+                                    <option value="RS" {{ old('state', $participant->state) === 'RS' ? 'selected' : '' }}>RS</option>
+                                    <option value="RO" {{ old('state', $participant->state) === 'RO' ? 'selected' : '' }}>RO</option>
+                                    <option value="RR" {{ old('state', $participant->state) === 'RR' ? 'selected' : '' }}>RR</option>
+                                    <option value="SC" {{ old('state', $participant->state) === 'SC' ? 'selected' : '' }}>SC</option>
+                                    <option value="SP" {{ old('state', $participant->state) === 'SP' ? 'selected' : '' }}>SP</option>
+                                    <option value="SE" {{ old('state', $participant->state) === 'SE' ? 'selected' : '' }}>SE</option>
+                                    <option value="TO" {{ old('state', $participant->state) === 'TO' ? 'selected' : '' }}>TO</option>
+                                </select>
+                                @error('state')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Informações Socioeconômicas -->
+        <div class="col-md-6 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Informações Socioeconômicas</h4>
+
+                    <div class="form-group">
+                        <label for="receives_government_benefit">Recebe Benefício do Governo?</label>
+                        <select id="receives_government_benefit" class="form-control @error('receives_government_benefit') is-invalid @enderror" name="receives_government_benefit">
+                            <option value="">Selecione</option>
+                            <option value="1" {{ old('receives_government_benefit', $participant->receives_government_benefit) == '1' ? 'selected' : '' }}>Sim</option>
+                            <option value="0" {{ old('receives_government_benefit', $participant->receives_government_benefit) == '0' ? 'selected' : '' }}>Não</option>
+                        </select>
+                        @error('receives_government_benefit')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group" id="benefit_type_group" style="{{ old('receives_government_benefit', $participant->receives_government_benefit) == '1' ? '' : 'display: none;' }}">
+                        <label for="benefit_type">Tipo de Benefício</label>
+                        <select id="benefit_type" class="form-control @error('benefit_type') is-invalid @enderror" name="benefit_type">
+                            <option value="">Selecione o benefício</option>
+                            <option value="Bolsa Família" {{ old('benefit_type', $participant->benefit_type) === 'Bolsa Família' ? 'selected' : '' }}>Bolsa Família</option>
+                            <option value="Auxílio Brasil" {{ old('benefit_type', $participant->benefit_type) === 'Auxílio Brasil' ? 'selected' : '' }}>Auxílio Brasil</option>
+                            <option value="BPC" {{ old('benefit_type', $participant->benefit_type) === 'BPC' ? 'selected' : '' }}>BPC</option>
+                            <option value="Auxílio Emergencial" {{ old('benefit_type', $participant->benefit_type) === 'Auxílio Emergencial' ? 'selected' : '' }}>Auxílio Emergencial</option>
+                            <option value="Outros" {{ old('benefit_type', $participant->benefit_type) === 'Outros' ? 'selected' : '' }}>Outros</option>
+                        </select>
+                        @error('benefit_type')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="family_members">Quantidade de Pessoas na Família</label>
+                                <input type="number"
+                                       class="form-control @error('family_members') is-invalid @enderror"
+                                       id="family_members"
+                                       name="family_members"
+                                       value="{{ old('family_members', $participant->family_members) }}"
+                                       min="1"
+                                       placeholder="Ex: 4">
+                                @error('family_members')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="monthly_income">Renda Mensal Familiar (R$)</label>
+                                <input type="number"
+                                       class="form-control @error('monthly_income') is-invalid @enderror"
+                                       id="monthly_income"
+                                       name="monthly_income"
+                                       value="{{ old('monthly_income', $participant->monthly_income) }}"
+                                       step="0.01"
+                                       min="0"
+                                       placeholder="Ex: 1200.00">
+                                @error('monthly_income')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="observations">Observações</label>
+                        <textarea class="form-control @error('observations') is-invalid @enderror"
+                                  id="observations"
+                                  name="observations"
+                                  rows="3"
+                                  placeholder="Informações adicionais sobre o participante">{{ old('observations', $participant->observations) }}</textarea>
+                        @error('observations')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botões de Ação -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <a href="{{ route('participants.show', $participant) }}" class="btn btn-light">
+                        <i class="mdi mdi-arrow-left"></i> Voltar
+                    </a>
+                </div>
+                <div>
+                    <a href="{{ route('participants.index') }}" class="btn btn-secondary">
+                        <i class="mdi mdi-cancel"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary ml-2">
+                        <i class="mdi mdi-content-save"></i> Salvar Alterações
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Máscara para telefone celular
+    // Controle do campo de tipo de benefício
+    const benefitSelect = document.getElementById('receives_government_benefit');
+    const benefitTypeGroup = document.getElementById('benefit_type_group');
+    const benefitTypeSelect = document.getElementById('benefit_type');
+
+    benefitSelect.addEventListener('change', function() {
+        if (this.value === '1') {
+            benefitTypeGroup.style.display = 'block';
+            benefitTypeSelect.setAttribute('required', 'required');
+        } else {
+            benefitTypeGroup.style.display = 'none';
+            benefitTypeSelect.removeAttribute('required');
+            benefitTypeSelect.value = '';
+        }
+    });
+
+    // Máscara para telefone
     const phoneInput = document.getElementById('phone');
-    if (phoneInput) {
-        phoneInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-
-            // Limitar a 11 dígitos (celular)
-            if (value.length > 11) {
-                value = value.substring(0, 11);
+    phoneInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 11) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            if (value.length === 14) {
+                e.target.value = value;
+            } else if (value.length < 14) {
+                value = value.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                e.target.value = value;
             }
-
-            // Aplicar máscara conforme o número de dígitos
-            if (value.length >= 2) {
-                value = value.replace(/(\d{2})(\d)/, '($1) $2');
-            }
-            if (value.length >= 8) {
-                value = value.replace(/(\d{2}\) \d{5})(\d)/, '$1-$2');
-            }
-
-            e.target.value = value;
-        });
-
-        // Placeholder para celular
-        phoneInput.placeholder = '(11) 99999-9999';
-    }
+        }
+    });
 
     // Máscara para CEP
-    const zipInput = document.getElementById('zip_code');
-    if (zipInput) {
-        zipInput.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 8) {
-                value = value.replace(/(\d{5})(\d)/, '$1-$2');
-            }
-            e.target.value = value;
-        });
-    }
-
-    // Máscara para documento (CPF/RG/CNH)
-    const documentInput = document.getElementById('document_number');
-    const documentTypeSelect = document.getElementById('document_type');
-
-    if (documentInput && documentTypeSelect) {
-        function applyDocumentMask() {
-            const type = documentTypeSelect.value;
-            documentInput.removeEventListener('input', cpfMask);
-            documentInput.removeEventListener('input', rgMask);
-            documentInput.removeEventListener('input', cnhMask);
-
-            if (type === 'CPF') {
-                documentInput.addEventListener('input', cpfMask);
-                documentInput.placeholder = '000.000.000-00';
-            } else if (type === 'RG') {
-                documentInput.addEventListener('input', rgMask);
-                documentInput.placeholder = '00.000.000-0';
-            } else if (type === 'CNH') {
-                documentInput.addEventListener('input', cnhMask);
-                documentInput.placeholder = '00000000000';
-            } else {
-                documentInput.placeholder = '';
-            }
-        }
-
-        function cpfMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 11) {
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
-            }
+    const zipcodeInput = document.getElementById('zipcode');
+    zipcodeInput.addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length <= 8) {
+            value = value.replace(/(\d{5})(\d{3})/, '$1-$2');
             e.target.value = value;
         }
-
-        function rgMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length <= 9) {
-                value = value.replace(/(\d{2})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d)/, '$1.$2');
-                value = value.replace(/(\d{3})(\d{1})$/, '$1-$2');
-            }
-            e.target.value = value;
-        }
-
-        function cnhMask(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 11) {
-                value = value.substring(0, 11);
-            }
-            e.target.value = value;
-        }
-
-        documentTypeSelect.addEventListener('change', applyDocumentMask);
-        applyDocumentMask(); // Aplicar máscara inicial
-    }
+    });
 });
 </script>
-@endpush
+
+@endsection

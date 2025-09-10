@@ -52,13 +52,6 @@
                                 <p><strong>Status:</strong> <span class="badge bg-success">Ativo</span></p>
                             </div>
                         </div>
-                                @empty
-                                    <div class="col-12">
-                                        <span class="text-muted">Nenhuma permissão atribuída</span>
-                                    </div>
-                                @endforelse
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
