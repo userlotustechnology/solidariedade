@@ -16,7 +16,7 @@ class ParticipantsSeeder extends Seeder
     {
         // Buscar um usuário para ser o responsável pelo cadastro
         $defaultUser = User::first();
-        
+
         if (!$defaultUser) {
             $this->command->error('Nenhum usuário encontrado. Execute primeiro o UserSeeder.');
             return;
@@ -962,12 +962,12 @@ class ParticipantsSeeder extends Seeder
         ];
 
         $this->command->info('Iniciando importação de participantes...');
-        
+
         foreach ($participants as $index => $participantData) {
             try {
                 // Verificar se o participante já existe pelo CPF
                 $existingParticipant = Participant::where('document_number', $participantData['document_number'])->first();
-                
+
                 if ($existingParticipant) {
                     $this->command->warn("Participante {$participantData['name']} já existe (CPF: {$participantData['document_number']})");
                     continue;
@@ -993,7 +993,7 @@ class ParticipantsSeeder extends Seeder
                 ]);
 
                 $this->command->info("✓ Participante criado: {$participantData['name']}");
-                
+
             } catch (\Exception $e) {
                 $this->command->error("Erro ao criar participante {$participantData['name']}: " . $e->getMessage());
             }

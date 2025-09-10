@@ -46,11 +46,6 @@
                                 <p class="fs-6 mb-0 opacity-75">{{ $delivery->description }}</p>
                             @endif
                         </div>
-                        <div class="text-end">
-                            <a href="{{ route('deliveries.edit', $delivery) }}" class="btn btn-light btn-lg">
-                                <i class="ti-pencil me-2"></i>Editar Entrega
-                            </a>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -319,7 +314,7 @@
                                                 @endswitch
                                             </span>
                                         </td>
-                                        <td class="py-3">
+                                        <td class="py-3 delivery-time">
                                             @if($record && $record->delivered_at)
                                                 <div class="text-success">
                                                     <i class="ti-clock me-1"></i>
@@ -330,7 +325,7 @@
                                                 <span class="text-muted">-</span>
                                             @endif
                                         </td>
-                                        <td class="py-3">
+                                        <td class="py-3 participant-notes">
                                             @if($record && $record->notes)
                                                 <div class="text-truncate" style="max-width: 150px;" title="{{ $record->notes }}">
                                                     {{ $record->notes }}
@@ -528,7 +523,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const rows = document.querySelectorAll('#participantsTable tbody tr');
 
         rows.forEach(row => {
-            const name = row.querySelector('td:first-child').textContent.toLowerCase();
+            const firstCell = row.querySelector('td:first-child');
+            const name = firstCell ? firstCell.textContent.toLowerCase() : '';
             const status = row.getAttribute('data-status');
 
             const matchesSearch = name.includes(searchTerm);
@@ -543,7 +539,16 @@ document.addEventListener('DOMContentLoaded', function() {
         button.addEventListener('click', function() {
             currentParticipantId = this.getAttribute('data-participant-id');
             const row = document.querySelector(`tr[data-participant-id="${currentParticipantId}"]`);
-            const participantName = row.querySelector('td:first-child strong').textContent;
+
+            // Verificação segura para obter o nome do participante
+            let participantName = '';
+            if (row) {
+                const firstCell = row.querySelector('td:first-child');
+                if (firstCell) {
+                    const strongElement = firstCell.querySelector('strong');
+                    participantName = strongElement ? strongElement.textContent : firstCell.textContent.trim();
+                }
+            }
 
             if (this.classList.contains('mark-present')) {
                 currentStatus = 'present';
@@ -621,6 +626,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function updateTableRow(participantId, status, notes) {
         const row = document.querySelector(`tr[data-participant-id="${participantId}"]`);
+        if (!row) {
+            console.error('Linha do participante não encontrada:', participantId);
+            return;
+        }
+
         const statusCell = row.querySelector('.status-badge');
         const timeCell = row.querySelector('.delivery-time');
         const notesCell = row.querySelector('.participant-notes');
@@ -635,24 +645,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 badgeClass = 'bg-success';
                 icon = 'fa-check';
                 text = 'Presente';
-                timeCell.textContent = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                if (timeCell) {
+                    timeCell.textContent = new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                }
                 break;
             case 'absent':
                 badgeClass = 'bg-danger';
                 icon = 'fa-times';
                 text = 'Ausente';
-                timeCell.textContent = '-';
+                if (timeCell) {
+                    timeCell.textContent = '-';
+                }
                 break;
             case 'excused':
                 badgeClass = 'bg-warning';
                 icon = 'fa-file-medical';
                 text = 'Justificado';
-                timeCell.textContent = '-';
+                if (timeCell) {
+                    timeCell.textContent = '-';
+                }
                 break;
         }
 
-        statusCell.innerHTML = `<span class="badge ${badgeClass}"><i class="fas ${icon}"></i> ${text}</span>`;
-        notesCell.textContent = notes || '-';
+        if (statusCell) {
+            statusCell.innerHTML = `<span class="badge ${badgeClass}"><i class="fas ${icon}"></i> ${text}</span>`;
+        }
+        if (notesCell) {
+            notesCell.textContent = notes || '-';
+        }
     }
 
     function updateStatistics() {

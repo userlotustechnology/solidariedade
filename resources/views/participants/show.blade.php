@@ -1,95 +1,111 @@
 @extends('layouts.app')
 
-@section('page-title', 'Detalhes do Participante')
-
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Detalhes do Participante') }}</h4>
-                    <div>
-                        @can('participants.update')
-                            <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning">
-                                <i class="fas fa-edit"></i> Editar
-                            </a>
-                        @endcan
-                        <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
-                            <i class="fas fa-print"></i> Imprimir Ficha
-                        </a>
-                        <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                            <i class="fas fa-arrow-left"></i> Voltar
-                        </a>
-                    </div>
-                </div>
+<div class="row">
+    <div class="col-md-12 grid-margin">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="font-weight-bold">Detalhes do Participante</h3>
+                <h6 class="font-weight-normal mb-0">Visualize todas as informações do participante</h6>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <div class="card-body">
-                    <!-- Status do Participante -->
-                    <div class="row mb-4">
-                        <div class="col-md-12">
-                            <div class="alert {{ $participant->active ? 'alert-success' : 'alert-warning' }} d-flex align-items-center">
-                                <i class="fas {{ $participant->active ? 'fa-check-circle' : 'fa-exclamation-triangle' }} me-2"></i>
+<!-- Status do Participante -->
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="alert {{ $participant->active ? 'alert-success' : 'alert-warning' }} d-flex align-items-center mb-0">
+                            <div class="mr-3">
+                                <i class="mdi {{ $participant->active ? 'mdi-check-circle' : 'mdi-alert-circle' }} icon-md"></i>
+                            </div>
+                            <div>
                                 <strong>Status: {{ $participant->active ? 'Participante Ativo' : 'Participante Inativo' }}</strong>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Informações Pessoais -->
-                    <div class="row">
-                        <div class="col-md-8 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-user me-2"></i>
-                                Informações Pessoais
-                            </h5>
-                            <hr>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-camera me-2"></i>
-                                Foto
-                            </h5>
-                            <hr>
+                    <div class="col-md-4 text-right">
+                        <div class="btn-group" role="group">
+                            @can('participants.update')
+                                <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning btn-sm">
+                                    Editar
+                                </a>
+                            @endcan
+                            <a href="{{ route('participants.print', $participant) }}" class="btn btn-info btn-sm" target="_blank">
+                                Imprimir
+                            </a>
+                            <a href="{{ route('participants.index') }}" class="btn btn-secondary btn-sm">
+                                Voltar
+                            </a>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-8">
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <div class="fw-bold text-muted mb-1">{{ __('Nome Completo') }}</div>
-                                    <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->name }}</p>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="fw-bold text-muted mb-1">{{ __('Idade') }}</div>
-                                    <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->age }} anos</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="text-center">
-                                @if($participant->photo)
-                                    <img src="{{ asset('storage/' . $participant->photo) }}"
-                                         alt="Foto de {{ $participant->name }}"
-                                         class="img-fluid rounded border"
-                                         style="max-height: 200px; max-width: 200px; object-fit: cover;">
-                                @else
-                                    <div class="border rounded d-flex align-items-center justify-content-center bg-light"
-                                         style="height: 200px; width: 200px; margin: 0 auto;">
-                                        <div class="text-center text-muted">
-                                            <i class="fas fa-user fa-3x mb-2"></i>
-                                            <p class="mb-0">Sem foto</p>
-                                        </div>
-                                    </div>
-                                @endif
+<div class="row">
+    <!-- Informações Pessoais -->
+    <div class="col-md-8 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Informações Pessoais</h4>
+
+                <div class="form-group">
+                    <label>Nome Completo</label>
+                    <div class="bg-light p-3 rounded">
+                        <strong>{{ $participant->name }}</strong>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Tipo de Documento</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->document_type }}
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Número do Documento</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->document_number }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Gênero') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Data de Nascimento</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->birth_date->format('d/m/Y') }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Idade</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ \Carbon\Carbon::parse($participant->birth_date)->age }} anos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Gênero</label>
+                            <div class="bg-light p-3 rounded">
                                 @if($participant->gender === 'M')
                                     Masculino
                                 @elseif($participant->gender === 'F')
@@ -99,11 +115,13 @@
                                 @else
                                     Não informado
                                 @endif
-                            </p>
+                            </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Estado Civil') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Estado Civil</label>
+                            <div class="bg-light p-3 rounded">
                                 @switch($participant->marital_status)
                                     @case('solteiro')
                                         Solteiro(a)
@@ -123,381 +141,369 @@
                                     @default
                                         Não informado
                                 @endswitch
-                            </p>
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Tipo de Documento') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->document_type }}</p>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Número do Documento') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->formatted_document }}</p>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Data de Nascimento') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->birth_date->format('d/m/Y') }}</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Telefone</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->phone ?: 'Não informado' }}
+                            </div>
                         </div>
                     </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Celular') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                {{ $participant->formatted_phone ?: 'Não informado' }}
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('E-mail') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>E-mail</label>
+                            <div class="bg-light p-3 rounded">
                                 {{ $participant->email ?: 'Não informado' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Endereço -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-map-marker-alt me-2"></i>
-                                Endereço
-                            </h5>
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Endereço') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->address }}</p>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Complemento') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->address_complement ?: 'Não informado' }}</p>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('Bairro') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->neighborhood }}</p>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-5">
-                            <div class="fw-bold text-muted mb-1">{{ __('Cidade') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->city }}</p>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="fw-bold text-muted mb-1">{{ __('Estado') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->state }}</p>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="fw-bold text-muted mb-1">{{ __('CEP') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->zip_code }}</p>
-                        </div>
-                    </div>
-
-                    <!-- Informações Familiares -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-users me-2"></i>
-                                Informações Familiares
-                            </h5>
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Pessoas na Família') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                {{ $participant->family_members }}
-                                {{ $participant->family_members === 1 ? 'pessoa' : 'pessoas' }}
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Renda Mensal Familiar') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                @if($participant->monthly_income)
-                                    R$ {{ number_format($participant->monthly_income, 2, ',', '.') }}
-                                @else
-                                    Não informado
-                                @endif
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Renda per capita') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                @if($participant->monthly_income)
-                                    R$ {{ number_format($participant->monthly_income / $participant->family_members, 2, ',', '.') }}
-                                @else
-                                    Não calculado
-                                @endif
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Benefícios e Documentação -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-file-alt me-2"></i>
-                                Benefícios e Documentação
-                            </h5>
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Recebe Benefício do Governo') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                @if($participant->receives_government_benefit)
-                                    <span class="badge bg-success">Sim</span>
-                                @else
-                                    <span class="badge bg-secondary">Não</span>
-                                @endif
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Tipo de Benefício') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                {{ $participant->government_benefit_type ?: 'Não informado' }}
-                            </p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Possui Documentos Básicos') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                @if($participant->has_documents)
-                                    <span class="badge bg-success">Sim</span>
-                                @else
-                                    <span class="badge bg-warning">Não</span>
-                                @endif
-                                <br><small class="text-muted">RG, CPF, Comprovante de residência</small>
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Situação Trabalhista -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-briefcase me-2"></i>
-                                Situação Trabalhista
-                            </h5>
-                            <hr>
-                        </div>
-                    </div>
-
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Situação de Trabalho') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                @switch($participant->employment_status)
-                                    @case('empregado')
-                                        <span class="badge bg-success">Empregado</span>
-                                        @break
-                                    @case('desempregado')
-                                        <span class="badge bg-danger">Desempregado</span>
-                                        @break
-                                    @case('aposentado')
-                                        <span class="badge bg-info">Aposentado</span>
-                                        @break
-                                    @case('pensionista')
-                                        <span class="badge bg-info">Pensionista</span>
-                                        @break
-                                    @case('autonomo')
-                                        <span class="badge bg-warning">Autônomo</span>
-                                        @break
-                                    @default
-                                        Não informado
-                                @endswitch
-                            </p>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="fw-bold text-muted mb-1">{{ __('Local de Trabalho') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">
-                                {{ $participant->workplace ?: 'Não informado' }}
-                            </p>
-                        </div>
-                    </div>
-
-                    @if($participant->observations)
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <div class="fw-bold text-muted mb-1">{{ __('Observações') }}</div>
-                                <div class="border rounded p-3 bg-light">
-                                    {{ $participant->observations }}
-                                </div>
                             </div>
                         </div>
-                    @endif
-
-                    <!-- Histórico de Entregas -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-primary d-flex align-items-center">
-                                <i class="fas fa-history me-2"></i>
-                                Histórico de Entregas
-                            </h5>
-                            <hr>
-                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    @if($participant->deliveryRecords->count() > 0)
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <div class="table-responsive">
-                                    <table class="table table-striped">
-                                        <thead class="table-dark">
-                                            <tr>
-                                                <th>Data da Entrega</th>
-                                                <th>Título</th>
-                                                <th>Data do Recebimento</th>
-                                                <th>Entregue por</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($participant->deliveryRecords->sortByDesc('delivery.delivery_date') as $record)
-                                                <tr>
-                                                    <td>{{ $record->delivery->delivery_date->format('d/m/Y') }}</td>
-                                                    <td>{{ $record->delivery->title }}</td>
-                                                    <td>
-                                                        @if($record->delivered_at)
-                                                            {{ $record->delivered_at->format('d/m/Y H:i') }}
-                                                        @else
-                                                            <span class="text-muted">-</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($record->deliveredBy)
-                                                            {{ $record->deliveredBy->name }}
-                                                        @else
-                                                            <span class="text-muted">-</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($record->delivered_at)
-                                                            <span class="badge bg-success">
-                                                                <i class="fas fa-check"></i> Recebido
-                                                            </span>
-                                                        @else
-                                                            <span class="badge bg-warning">
-                                                                <i class="fas fa-clock"></i> Pendente
-                                                            </span>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+    <!-- Foto do Participante -->
+    <div class="col-md-4 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Foto</h4>
 
-                        <!-- Estatísticas de Entregas -->
-                        <div class="row mb-4">
-                            <div class="col-md-4">
-                                <div class="card bg-success text-white">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-check-circle"></i>
-                                            Cestas Recebidas
-                                        </h5>
-                                        <h3 class="card-text">{{ $participant->deliveryRecords->whereNotNull('delivered_at')->count() }}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card bg-warning text-white">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-clock"></i>
-                                            Cestas Pendentes
-                                        </h5>
-                                        <h3 class="card-text">{{ $participant->deliveryRecords->whereNull('delivered_at')->count() }}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="card bg-info text-white">
-                                    <div class="card-body text-center">
-                                        <h5 class="card-title">
-                                            <i class="fas fa-box"></i>
-                                            Total de Entregas
-                                        </h5>
-                                        <h3 class="card-text">{{ $participant->deliveryRecords->count() }}</h3>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div class="text-center">
+                    @if($participant->photo)
+                        <img src="{{ asset('storage/' . $participant->photo) }}"
+                             alt="Foto de {{ $participant->name }}"
+                             class="img-fluid rounded border"
+                             style="max-height: 250px; max-width: 100%; object-fit: cover;">
                     @else
-                        <div class="row mb-4">
-                            <div class="col-md-12">
-                                <div class="alert alert-info text-center">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    Este participante ainda não possui histórico de entregas.
-                                </div>
+                        <div class="border rounded d-flex align-items-center justify-content-center bg-light"
+                             style="height: 250px;">
+                            <div class="text-center text-muted">
+                                <i class="mdi mdi-account icon-lg mb-2"></i>
+                                <p class="mb-0">Sem foto</p>
                             </div>
                         </div>
                     @endif
+                </div>
 
-                    <!-- Informações de Cadastro -->
-                    <div class="row">
-                        <div class="col-md-12 mb-3">
-                            <h5 class="text-secondary d-flex align-items-center">
-                                <i class="fas fa-info-circle me-2"></i>
-                                Informações de Cadastro
-                            </h5>
-                            <hr>
-                        </div>
+                <div class="form-group mt-3">
+                    <label>Data do Cadastro</label>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->registered_at->format('d/m/Y H:i') }}
                     </div>
+                </div>
 
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Cadastrado por') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->registeredBy->name }}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Data do Cadastro') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->registered_at->format('d/m/Y H:i') }}</p>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="fw-bold text-muted mb-1">{{ __('Última Atualização') }}</div>
-                            <p class="form-control-plaintext border rounded p-2 bg-light">{{ $participant->updated_at->format('d/m/Y H:i') }}</p>
-                        </div>
+                <div class="form-group">
+                    <label>Última Atualização</label>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->updated_at->format('d/m/Y H:i') }}
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                    <!-- Ações -->
-                    <div class="row mb-0">
-                        <div class="col-md-12">
-                            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-                                @can('participants.update')
-                                    <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning">
-                                        <i class="fas fa-edit"></i> {{ __('Editar Participante') }}
-                                    </a>
-                                @endcan
+<div class="row">
+    <!-- Endereço -->
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Endereço</h4>
 
-                                <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
-                                    <i class="fas fa-print"></i> {{ __('Imprimir Ficha') }}
-                                </a>
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->address }}
+                    </div>
+                </div>
 
-                                @can('deliveries.manage')
-                                    @if($participant->active)
-                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#deliveryModal">
-                                            <i class="fas fa-box"></i> {{ __('Registrar Entrega') }}
-                                        </button>
-                                    @endif
-                                @endcan
-
-                                <a href="{{ route('participants.index') }}" class="btn btn-secondary">
-                                    <i class="fas fa-list"></i> {{ __('Lista de Participantes') }}
-                                </a>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Complemento</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->address_complement ?: 'Não informado' }}
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Bairro</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->neighborhood }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Cidade</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->city }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->state }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label>CEP</label>
+                            <div class="bg-light p-3 rounded">
+                                {{ $participant->zip_code }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Informações Familiares -->
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Informações Familiares</h4>
+
+                <div class="form-group">
+                    <label>Pessoas na Família</label>
+                    <div class="bg-light p-3 rounded">
+                        <strong>{{ $participant->family_members }}</strong>
+                        {{ $participant->family_members === 1 ? 'pessoa' : 'pessoas' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Renda Mensal Familiar</label>
+                    <div class="bg-light p-3 rounded">
+                        @if($participant->monthly_income)
+                            <strong>R$ {{ number_format($participant->monthly_income, 2, ',', '.') }}</strong>
+                        @else
+                            Não informado
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Renda per capita</label>
+                    <div class="bg-light p-3 rounded">
+                        @if($participant->monthly_income)
+                            <strong>R$ {{ number_format($participant->monthly_income / $participant->family_members, 2, ',', '.') }}</strong>
+                        @else
+                            Não calculado
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Benefícios e Documentação -->
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Benefícios e Documentação</h4>
+
+                <div class="form-group">
+                    <label>Recebe Benefício do Governo</label>
+                    <div class="bg-light p-3 rounded">
+                        @if($participant->receives_government_benefit)
+                            <span class="badge badge-success">Sim</span>
+                        @else
+                            <span class="badge badge-secondary">Não</span>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Tipo de Benefício</label>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->government_benefit_type ?: 'Não informado' }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Possui Documentos Básicos</label>
+                    <div class="bg-light p-3 rounded">
+                        @if($participant->has_documents)
+                            <span class="badge badge-success">Sim</span>
+                        @else
+                            <span class="badge badge-warning">Não</span>
+                        @endif
+                        <br><small class="text-muted">RG, CPF, Comprovante de residência</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Situação Trabalhista -->
+    <div class="col-md-6 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Situação Trabalhista</h4>
+
+                <div class="form-group">
+                    <label>Situação de Trabalho</label>
+                    <div class="bg-light p-3 rounded">
+                        @switch($participant->employment_status)
+                            @case('empregado')
+                                <span class="badge badge-success">Empregado</span>
+                                @break
+                            @case('desempregado')
+                                <span class="badge badge-danger">Desempregado</span>
+                                @break
+                            @case('aposentado')
+                                <span class="badge badge-info">Aposentado</span>
+                                @break
+                            @case('pensionista')
+                                <span class="badge badge-info">Pensionista</span>
+                                @break
+                            @case('autonomo')
+                                <span class="badge badge-warning">Autônomo</span>
+                                @break
+                            @default
+                                Não informado
+                        @endswitch
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Local de Trabalho</label>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->workplace ?: 'Não informado' }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if($participant->observations)
+    <div class="row">
+        <div class="col-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Observações</h4>
+                    <div class="bg-light p-3 rounded">
+                        {{ $participant->observations }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endif
+
+<!-- Histórico de Entregas -->
+<div class="row">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Histórico de Entregas</h4>
+
+                @if($participant->deliveryRecords->count() > 0)
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Entrega</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                    <th>Documento Verificado</th>
+                                    <th>Observações</th>
+                                    <th>Registrado em</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($participant->deliveryRecords->sortByDesc('created_at') as $record)
+                                    <tr>
+                                        <td>
+                                            <strong>{{ $record->delivery->title }}</strong>
+                                        </td>
+                                        <td>{{ $record->delivery->delivery_date->format('d/m/Y') }}</td>
+                                        <td>
+                                            @switch($record->delivery->status)
+                                                @case('scheduled')
+                                                    <span class="badge badge-warning">Agendada</span>
+                                                    @break
+                                                @case('in_progress')
+                                                    <span class="badge badge-info">Em Andamento</span>
+                                                    @break
+                                                @case('completed')
+                                                    <span class="badge badge-success">Concluída</span>
+                                                    @break
+                                                @case('cancelled')
+                                                    <span class="badge badge-danger">Cancelada</span>
+                                                    @break
+                                            @endswitch
+                                        </td>
+                                        <td>
+                                            @if($record->document_verified)
+                                                <span class="badge badge-success">Sim</span>
+                                            @else
+                                                <span class="badge badge-warning">Não</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $record->notes ?: '-' }}</td>
+                                        <td>{{ $record->created_at->format('d/m/Y H:i') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                @else
+                    <div class="text-center text-muted py-4">
+                        <i class="mdi mdi-package-variant icon-lg mb-2"></i>
+                        <p class="mb-0">Nenhuma entrega registrada para este participante</p>
+                    </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Ações -->
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        @can('participants.update')
+                            <a href="{{ route('participants.edit', $participant) }}" class="btn btn-warning">
+                                Editar Participante
+                            </a>
+                        @endcan
+                        <a href="{{ route('participants.print', $participant) }}" class="btn btn-info" target="_blank">
+                            Imprimir Ficha
+                        </a>
+                    </div>
+                    <div>
+                        @can('deliveries.manage')
+                            @if($participant->active)
+                                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#deliveryModal">
+                                    Registrar Entrega
+                                </button>
+                            @endif
+                        @endcan
+                        <a href="{{ route('participants.index') }}" class="btn btn-secondary">
+                            Lista de Participantes
+                        </a>
                     </div>
                 </div>
             </div>
@@ -507,47 +513,51 @@
 
 @can('deliveries.manage')
 <!-- Modal para Registrar Entrega -->
-<div class="modal fade" id="deliveryModal" tabindex="-1" aria-labelledby="deliveryModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
+<div class="modal fade" id="deliveryModal" tabindex="-1" role="dialog" aria-labelledby="deliveryModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="deliveryModalLabel">Registrar Entrega para {{ $participant->name }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <form action="{{ route('delivery-records.store') }}" method="POST">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="participant_id" value="{{ $participant->id }}">
 
-                    <div class="mb-3">
-                        <label for="delivery_id" class="form-label">{{ __('Entrega') }}</label>
-                        <select name="delivery_id" id="delivery_id" class="form-select" required>
+                    <div class="form-group">
+                        <label for="delivery_id">Entrega</label>
+                        <select name="delivery_id" id="delivery_id" class="form-control" required>
                             <option value="">Selecione uma entrega</option>
-                            @foreach($availableDeliveries as $delivery)
-                                <option value="{{ $delivery->id }}">
-                                    {{ $delivery->title }} - {{ $delivery->delivery_date->format('d/m/Y') }}
-                                </option>
-                            @endforeach
+                            @if(isset($availableDeliveries))
+                                @foreach($availableDeliveries as $delivery)
+                                    <option value="{{ $delivery->id }}">
+                                        {{ $delivery->title }} - {{ $delivery->delivery_date->format('d/m/Y') }}
+                                    </option>
+                                @endforeach
+                            @endif
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="document_verified" class="form-label">{{ __('Documento Verificado?') }}</label>
-                        <select name="document_verified" id="document_verified" class="form-select" required>
+                    <div class="form-group">
+                        <label for="document_verified">Documento Verificado?</label>
+                        <select name="document_verified" id="document_verified" class="form-control" required>
                             <option value="1">Sim, documento foi verificado</option>
                             <option value="0">Não foi possível verificar o documento</option>
                         </select>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="notes" class="form-label">{{ __('Observações') }}</label>
+                    <div class="form-group">
+                        <label for="notes">Observações</label>
                         <textarea name="notes" id="notes" class="form-control" rows="3" placeholder="Observações sobre a entrega..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-success">
-                        <i class="fas fa-check"></i> Registrar Entrega
+                        Registrar Entrega
                     </button>
                 </div>
             </form>
@@ -555,8 +565,5 @@
     </div>
 </div>
 @endcan
-@endsection
 
-@push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-@endpush
+@endsection
