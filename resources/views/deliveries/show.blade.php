@@ -545,8 +545,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (row) {
                 const firstCell = row.querySelector('td:first-child');
                 if (firstCell) {
-                    const strongElement = firstCell.querySelector('strong');
-                    participantName = strongElement ? strongElement.textContent : firstCell.textContent.trim();
+                    const h6Element = firstCell.querySelector('h6');
+                    participantName = h6Element ? h6Element.textContent.trim() : firstCell.textContent.trim();
                 }
             }
 
@@ -692,15 +692,22 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
 
         const container = document.querySelector('.container-fluid');
-        const firstRow = container.querySelector('.row');
 
-        if (container && firstRow) {
-            container.insertBefore(alertDiv, firstRow);
-        } else {
-            // Fallback: adicionar no início do container
-            if (container) {
+        if (container) {
+            // Buscar o primeiro filho direto que seja uma div.row
+            const firstDirectRow = Array.from(container.children).find(child =>
+                child.tagName === 'DIV' && child.classList.contains('row')
+            );
+
+            if (firstDirectRow) {
+                container.insertBefore(alertDiv, firstDirectRow);
+            } else {
+                // Se não encontrar uma div.row como filho direto, adicionar no início
                 container.insertAdjacentElement('afterbegin', alertDiv);
             }
+        } else {
+            // Fallback: adicionar no body se não encontrar container
+            document.body.insertAdjacentElement('afterbegin', alertDiv);
         }
 
         setTimeout(() => {
