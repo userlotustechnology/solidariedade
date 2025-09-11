@@ -91,19 +91,12 @@
                                                 <td>{{ $participant->id }}</td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        @if($participant->photo)
-                                                            <div class="me-2">
-                                                                <img src="{{ asset('storage/' . $participant->photo) }}"
-                                                                     alt="Foto de {{ $participant->name }}"
-                                                                     class="rounded-circle"
-                                                                     style="width: 40px; height: 40px; object-fit: cover;">
-                                                            </div>
-                                                        @else
-                                                            <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center me-2"
-                                                                 style="width: 40px; height: 40px;">
-                                                                {{ strtoupper(substr($participant->name, 0, 1)) }}
-                                                            </div>
-                                                        @endif
+                                                        <div class="me-2">
+                                                            <img src="{{ \App\Helpers\MediaHelper::getParticipantAvatarUrl($participant->photo) }}"
+                                                                 alt="Foto"
+                                                                 class="rounded-circle"
+                                                                 style="width: 40px; height: 40px; object-fit: cover;">
+                                                        </div>
                                                         <div>
                                                             <h6 class="mb-0">{{ $participant->name }}</h6>
                                                         </div>
