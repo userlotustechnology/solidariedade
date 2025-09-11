@@ -160,20 +160,10 @@
                 <h4 class="card-title">Foto</h4>
 
                 <div class="text-center">
-                    @if($participant->photo)
-                        <img src="{{ asset('storage/' . $participant->photo) }}"
-                             alt="Foto de {{ $participant->name }}"
-                             class="img-fluid rounded border"
-                             style="max-height: 250px; max-width: 100%; object-fit: cover;">
-                    @else
-                        <div class="border rounded d-flex align-items-center justify-content-center bg-light"
-                             style="height: 250px;">
-                            <div class="text-center text-muted">
-                                <i class="mdi mdi-account icon-lg mb-2"></i>
-                                <p class="mb-0">Sem foto</p>
-                            </div>
-                        </div>
-                    @endif
+                <img src="{{ \App\Helpers\MediaHelper::getParticipantAvatarUrl($participant->photo) }}"
+                    alt="Foto de {{ $participant->name }}"
+                    class="img-fluid rounded border"
+                    style="max-height: 250px; max-width: 100%; object-fit: cover;">
                 </div>
 
                 <div class="form-group mt-3">

@@ -173,22 +173,13 @@
                 <div class="card-body">
                     <h4 class="card-title">Foto</h4>
 
-                    @if($participant->photo)
-                        <div class="text-center mb-3">
-                            <img src="{{ asset('storage/' . $participant->photo) }}"
-                                 alt="Foto do participante"
-                                 class="img-fluid rounded"
-                                 style="max-height: 200px; max-width: 100%;">
-                            <p class="text-muted mt-2 mb-0">Foto atual</p>
-                        </div>
-                    @else
-                        <div class="text-center mb-3">
-                            <div class="d-flex align-items-center justify-content-center bg-light rounded" style="height: 200px;">
-                                <i class="mdi mdi-account-box-outline" style="font-size: 4rem; color: #ccc;"></i>
-                            </div>
-                            <p class="text-muted mt-2 mb-0">Nenhuma foto cadastrada</p>
-                        </div>
-                    @endif
+                    <div class="text-center mb-3">
+                        <img src="{{ \App\Helpers\MediaHelper::getParticipantAvatarUrl($participant->photo) }}"
+                             alt="Foto do participante"
+                             class="img-fluid rounded"
+                             style="max-height: 200px; max-width: 100%;">
+                        <p class="text-muted mt-2 mb-0">{{ $participant->photo ? 'Foto atual' : 'Nenhuma foto cadastrada' }}</p>
+                    </div>
 
                     <div class="form-group">
                         <label for="photo">Alterar Foto</label>
