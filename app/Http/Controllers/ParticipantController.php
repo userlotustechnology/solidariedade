@@ -84,7 +84,8 @@ class ParticipantController extends Controller
         // Upload da foto se fornecida
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('participants/photos', 'public');
+            $disk = app()->environment('local') ? 'public' : 's3';
+            $photoPath = $request->file('photo')->store('participants/photos', $disk);
         }
 
         $participant = Participant::create([
@@ -187,7 +188,8 @@ class ParticipantController extends Controller
             if ($participant->photo && file_exists(storage_path('app/public/' . $participant->photo))) {
                 unlink(storage_path('app/public/' . $participant->photo));
             }
-            $photoPath = $request->file('photo')->store('participants/photos', 'public');
+            $disk = app()->environment('local') ? 'public' : 's3';
+            $photoPath = $request->file('photo')->store('participants/photos', $disk);
         }
 
         $participant->update([

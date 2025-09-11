@@ -10,6 +10,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+// Página de navegação do S3
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/s3browser', [\App\Http\Controllers\S3BrowserController::class, 'index'])->name('s3browser.index');
+});
+
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
