@@ -1,7 +1,7 @@
 # Makefile para gerenciar o ambiente Docker do Sistema Solidariedade
 
 # Variáveis
-DOCKER_COMPOSE = docker-compose
+DOCKER_COMPOSE = docker compose
 PHP_CONTAINER = solidariedade_php
 MYSQL_CONTAINER = solidariedade_mysql
 NGINX_CONTAINER = solidariedade_nginx
